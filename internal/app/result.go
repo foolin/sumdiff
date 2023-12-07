@@ -18,3 +18,7 @@ const (
 var (
 	OK = Result{CODE_OK, nil}
 )
+
+func NewError(code Code, err error) Result {
+	return Result{code, err}
+}

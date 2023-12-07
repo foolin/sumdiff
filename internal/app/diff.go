@@ -2,13 +2,16 @@ package app
 
 import (
 	"github.com/foolin/sumdiff/internal/util"
+	"io/fs"
 	"os"
 )
 
-//
-//func Diff(path1, path2 string) bool {
-//
-//}
+func DiffDirectory(path1, path2 string) Result {
+	util.WalkDir(path1, func(relative string, path string, info fs.FileInfo, err error) error {
+
+	})
+
+}
 
 func DiffFile(file1, file2 string) Result {
 	f1, err := os.Stat(file1)
