@@ -1,4 +1,4 @@
-# sumdiff
+# sumdife
 Compare tools for directory and files.
 
 # Usage

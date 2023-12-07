@@ -6,17 +6,35 @@ import (
 	"strings"
 )
 
-type FileSum struct {
-	Info fs.FileInfo
-	Hash string
+func ListPath(path string) (map[string]PathInfo, error) {
+	data := make(map[string]PathInfo)
+	err := WalkPath(path, func(info PathInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		data[info.Relative] = info
+		return nil
+	})
+	return data, err
 }
 
-func WalkDir(path string, fn WalkFunc) error {
-	dirName := filepath.Dir(path)
+func WalkPath(path string, fn WalkFunc) error {
+	rootPath := path
 	return filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
-		relative := strings.TrimPrefix(path, dirName)
-		return fn(relative, path, info, err)
+		relative := strings.TrimPrefix(path, rootPath)
+		walkInfo := PathInfo{
+			Relative: relative,
+			Path:     path,
+			Info:     info,
+		}
+		return fn(walkInfo, err)
 	})
 }
 
-type WalkFunc func(relative string, path string, info fs.FileInfo, err error) error
+type WalkFunc func(info PathInfo, err error) error
+
+type PathInfo struct {
+	Relative string
+	Path     string
+	Info     fs.FileInfo
+}

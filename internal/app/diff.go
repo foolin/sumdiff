@@ -1,40 +1,91 @@
 package app
 
 import (
+	"fmt"
+	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/util"
-	"io/fs"
 	"os"
+	"strings"
 )
 
-func DiffDirectory(path1, path2 string) Result {
-	util.WalkDir(path1, func(relative string, path string, info fs.FileInfo, err error) error {
+func DiffDir(path1, path2 string) (bool, error) {
+	data1, err := util.ListPath(path1)
+	if err != nil {
+		return false, err
+	}
+	data2, err := util.ListPath(path2)
+	if err != nil {
+		return false, err
+	}
+	if len(data1) != len(data2) {
+		return false, fmt.Errorf("not equal file count [%v!=%v]", len(data1), len(data2))
+	}
+	for k, v1 := range data1 {
+		plog.PrintProgress("compare diff path " + k)
+		v2, ok := data2[k]
+		if !ok {
+			return false, fmt.Errorf("path2 not exist path %v", k)
+		}
+		if v1.Info.Size() != v2.Info.Size() {
+			return false, fmt.Errorf("%v not equal size [%v!=%v]", k, v1.Info.Size(), v2.Info.Size())
+		}
+		if v1.Info.IsDir() != v2.Info.IsDir() {
+			return false, fmt.Errorf("%v not equal is directory [%v!=%v]", k, v1.Info.IsDir(), v2.Info.IsDir())
+		}
+		//File check file md5
+		if !v1.Info.IsDir() {
+			fn := util.Sha256
+			h1, err := fn(v1.Path)
+			if err != nil {
+				return false, err
+			}
+			h2, err := fn(v2.Path)
+			if err != nil {
+				return false, err
+			}
+			if h1 != h2 {
+				return false, fmt.Errorf("%v not equal hash [%v!=%v]", k, h1, h2)
+			}
+		}
 
-	})
-
+		delete(data2, k)
+	}
+	if len(data2) != 0 {
+		remain := make([]string, 0)
+		for _, info := range data2 {
+			if len(remain) >= 5 {
+				remain = append(remain, "...")
+				break
+			}
+			remain = append(remain, info.Path)
+		}
+		return false, fmt.Errorf("path1 not exist path: %v", strings.Join(remain, ","))
+	}
+	return true, nil
 }
 
-func DiffFile(file1, file2 string) Result {
+func DiffFile(file1, file2 string) (bool, error) {
 	f1, err := os.Stat(file1)
 	if err != nil {
-		return Result{CODE_ERROR, err}
+		return false, err
 	}
 	f2, err := os.Stat(file2)
 	if err != nil {
-		return Result{CODE_ERROR, err}
+		return false, err
 	}
 	if f1.Size() != f2.Size() {
-		return Result{CODE_NQ_SIZE, err}
+		return false, fmt.Errorf("not equal size")
 	}
 	h1, err := util.Sha1(file1)
 	if err != nil {
-		return Result{CODE_ERROR, err}
+		return false, err
 	}
 	h2, err := util.Sha1(file2)
 	if err != nil {
-		return Result{CODE_ERROR, err}
+		return false, err
 	}
 	if h1 != h2 {
-		return Result{CODE_NQ_HASH, err}
+		return false, fmt.Errorf("not equal hash")
 	}
-	return OK
+	return true, nil
 }
