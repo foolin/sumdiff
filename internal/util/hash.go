@@ -1,4 +1,4 @@
-package utilx
+package util
 
 import (
 	"bufio"

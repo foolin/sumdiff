@@ -16,5 +16,5 @@ const (
 )
 
 var (
-	OK = Result{OK, nil}
+	OK = Result{CODE_OK, nil}
 )
