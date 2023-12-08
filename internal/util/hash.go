@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"crypto/sha512"
 	"fmt"
 	"hash"
 	"io"
@@ -21,6 +22,10 @@ func Sha1(file string) (string, error) {
 
 func Sha256(file string) (string, error) {
 	return HashHex(file, sha256.New())
+}
+
+func Sha512(file string) (string, error) {
+	return HashHex(file, sha512.New())
 }
 
 func HashHex(file string, h hash.Hash) (string, error) {
