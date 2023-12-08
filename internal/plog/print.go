@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Print(message string) {
+func Print(message any) {
 	fmt.Println(message)
 }
 
