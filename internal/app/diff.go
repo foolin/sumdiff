@@ -40,7 +40,7 @@ func DiffDir(path1, path2 string) (bool, error) {
 		return false, fmt.Errorf("not equal file count [%v!=%v]", len(data1), len(data2))
 	}
 	for k, v1 := range data1 {
-		plog.PrintProgress("compare diff path " + k)
+		plog.Progress("compare diff path " + k)
 		v2, ok := data2[k]
 		if !ok {
 			return false, fmt.Errorf("path2 not exist path %v", k)
@@ -53,12 +53,11 @@ func DiffDir(path1, path2 string) (bool, error) {
 		}
 		//File check file md5
 		if !v1.Info.IsDir() {
-			fn := util.Sha256
-			h1, err := fn(v1.Path)
+			h1, err := util.Sha256(v1.Path)
 			if err != nil {
 				return false, err
 			}
-			h2, err := fn(v2.Path)
+			h2, err := util.Sha256(v2.Path)
 			if err != nil {
 				return false, err
 			}
@@ -95,11 +94,11 @@ func DiffFile(file1, file2 string) (bool, error) {
 	if f1.Size() != f2.Size() {
 		return false, fmt.Errorf("not equal size")
 	}
-	h1, err := util.Sha1(file1)
+	h1, err := util.Sha256(file1)
 	if err != nil {
 		return false, err
 	}
-	h2, err := util.Sha1(file2)
+	h2, err := util.Sha256(file2)
 	if err != nil {
 		return false, err
 	}

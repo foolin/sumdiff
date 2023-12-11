@@ -13,22 +13,22 @@ import (
 )
 
 func Md5(file string) (string, error) {
-	return HashHex(file, md5.New())
+	return HashHex(md5.New(), file)
 }
 
 func Sha1(file string) (string, error) {
-	return HashHex(file, sha1.New())
+	return HashHex(sha1.New(), file)
 }
 
 func Sha256(file string) (string, error) {
-	return HashHex(file, sha256.New())
+	return HashHex(sha256.New(), file)
 }
 
 func Sha512(file string) (string, error) {
-	return HashHex(file, sha512.New())
+	return HashHex(sha512.New(), file)
 }
 
-func HashHex(file string, h hash.Hash) (string, error) {
+func HashHex(h hash.Hash, file string) (string, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return "", err

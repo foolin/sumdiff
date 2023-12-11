@@ -3,20 +3,35 @@ package plog
 import (
 	"fmt"
 	"github.com/mattn/go-runewidth"
+	"io"
+	"os"
 	"strings"
 )
 
-func Print(message any) {
-	fmt.Println(message)
+const maxWidth = 100
+
+var Writer io.Writer = os.Stdout
+
+func Print(a ...any) {
+	_, _ = Writer.Write([]byte(fmt.Sprint(a...)))
 }
 
-func PrintProgress(message string) {
-	width := 100
-	fmt.Printf("%s\r", runewidth.Wrap(runewidth.Truncate(message, width-97, "..."), width))
+func Printf(format string, a ...any) {
+	_, _ = Writer.Write([]byte(fmt.Sprintf(format, a...)))
 }
-func PrintProgressEnd(message string) {
-	width := 100
-	fmt.Printf("%s\r\n", runewidth.Wrap(runewidth.Truncate(message, width-97, "..."), width))
+
+func Println(a ...any) {
+	_, _ = Writer.Write([]byte(fmt.Sprintln(a...)))
+}
+
+func Progress(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	fmt.Printf("%s\r", runewidth.Truncate(msg, maxWidth-3, "..."))
+}
+func PrintEnd(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	Printf("%s\r", runewidth.FillLeft(" ", maxWidth))
+	Println(msg)
 }
 
 func PrintError(path string, message string) {

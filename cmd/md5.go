@@ -1,27 +1,20 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2023 Foolin
 */
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
 // md5Cmd represents the md5 command
 var md5Cmd = &cobra.Command{
-	Use:   "md5",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "md5 file [file2] [file3] ...",
+	Short: "Calculate the hexadecimal value of the MD5 files",
+	Long:  `Calculate the hexadecimal value of the MD5 files`,
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("md5 called")
+
 	},
 }
 

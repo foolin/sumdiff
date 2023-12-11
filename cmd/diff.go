@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Foolin
 */
 package cmd
 
@@ -18,9 +18,9 @@ var diffCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ret, err := app.Diff(args[0], args[1])
 		if err != nil {
-			plog.Print(err.Error())
+			plog.PrintEnd(err.Error())
 		} else {
-			plog.Print(ret)
+			plog.PrintEnd("%v", ret)
 		}
 
 	},
