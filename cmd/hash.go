@@ -10,7 +10,7 @@ import (
 	"crypto/sha512"
 	"github.com/foolin/sumdiff/internal/app"
 	"github.com/foolin/sumdiff/internal/plog"
-	"github.com/foolin/sumdiff/vo"
+	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/spf13/cobra"
 	"hash"
 	"strings"

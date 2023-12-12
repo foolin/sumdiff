@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/foolin/sumdiff/internal/util"
-	"github.com/foolin/sumdiff/vo"
+	"github.com/foolin/sumdiff/internal/vo"
 	"hash"
 	"io/fs"
 	"os"
@@ -17,7 +17,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	}
 	results = make([]vo.HashVo, 0)
 	fn := func(root, file string, size int64) error {
-		relative := strings.TrimPrefix(file, root)
+		relative := strings.TrimPrefix(strings.TrimPrefix(file, root), string(os.PathSeparator))
 		hex, err := util.HashHex(h, file)
 		if err != nil {
 			return err
@@ -37,7 +37,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 			return results, err
 		}
 		if stat.IsDir() {
-			root = f
+			root = filepath.Dir(f)
 			err = filepath.Walk(f, func(path string, info fs.FileInfo, err error) error {
 				if err != nil {
 					return err

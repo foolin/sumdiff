@@ -9,9 +9,10 @@ type HashVo struct {
 }
 
 func HashToTable(list []HashVo) [][]string {
-	out := make([][]string, len(list))
+	out := make([][]string, len(list)+1)
+	out[0] = []string{"Hash", "Size", "Path"}
 	for i, v := range list {
-		out[i] = []string{v.Hash, fmt.Sprintf("%v", v.Size), v.Path}
+		out[i+1] = []string{v.Hash, fmt.Sprintf("%v", v.Size), v.Path}
 	}
 	return out
 }
