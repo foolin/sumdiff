@@ -19,8 +19,8 @@ import (
 // hashCmd represents the hash command
 var hashCmd = &cobra.Command{
 	Use:   "hash [md5|sha1|sha256|sha512] path path2 ...",
-	Short: "Calculate file hash hex value",
-	Long:  `Calculate file hash hex value`,
+	Short: "Calculate file hash hex string",
+	Long:  `Calculate file hash hex string`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		t := strings.ToLower(args[0])
