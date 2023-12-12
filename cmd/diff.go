@@ -11,7 +11,7 @@ import (
 
 // diffCmd represents the diff command
 var diffCmd = &cobra.Command{
-	Use:   "diff path1 path2",
+	Use:   "diff [path1] [path2]",
 	Short: "Compare different files or directory",
 	Long:  `Compare different files or directory`,
 	Args:  cobra.MinimumNArgs(2),
