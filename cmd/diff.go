@@ -11,18 +11,16 @@ import (
 
 // diffCmd represents the diff command
 var diffCmd = &cobra.Command{
-	Use:   "diff [path1] [path2]",
+	Use:   "diff <path1> <path2>",
 	Short: "Compare different files or directory",
 	Long:  `Compare different files or directory`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		ret, err := app.Diff(args[0], args[1])
 		if err != nil {
-			plog.PrintEnd(err.Error())
-		} else {
-			plog.PrintEnd("%v", ret)
+			plog.Writeln(err.Error())
 		}
-
+		plog.Writeln(ret)
 	},
 }
 

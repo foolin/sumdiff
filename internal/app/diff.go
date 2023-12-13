@@ -37,7 +37,7 @@ func DiffDir(path1, path2 string) (bool, error) {
 		return false, err
 	}
 	if len(data1) != len(data2) {
-		return false, fmt.Errorf("not equal file count [%v!=%v]", len(data1), len(data2))
+		return false, fmt.Errorf("not equal files count [%v!=%v]", len(data1), len(data2))
 	}
 	for k, v1 := range data1 {
 		plog.Progress("compare diff path " + k)

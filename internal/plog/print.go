@@ -10,36 +10,34 @@ import (
 
 const maxWidth = 100
 
-var Writer io.Writer = os.Stdout
+var printer io.Writer = os.Stdout
+var writer io.Writer = os.Stderr
 
 func Print(a ...any) {
-	_, _ = Writer.Write([]byte(fmt.Sprint(a...)))
+	_, _ = printer.Write([]byte(fmt.Sprint(a...)))
 }
 
 func Printf(format string, a ...any) {
-	_, _ = Writer.Write([]byte(fmt.Sprintf(format, a...)))
+	_, _ = printer.Write([]byte(fmt.Sprintf(format, a...)))
 }
 
 func Println(a ...any) {
-	_, _ = Writer.Write([]byte(fmt.Sprintln(a...)))
+	_, _ = printer.Write([]byte(fmt.Sprintln(a...)))
 }
 
-func Progress(format string, a ...any) {
-	msg := fmt.Sprintf(format, a...)
-	fmt.Printf("%s\r", runewidth.Truncate(msg, maxWidth-3, "..."))
-}
-func PrintEnd(format string, a ...any) {
-	msg := fmt.Sprintf(format, a...)
-	Printf("%s\r", runewidth.FillLeft(" ", maxWidth))
-	Println(msg)
+func Write(a ...any) {
+	_, _ = writer.Write([]byte(fmt.Sprint(a...)))
 }
 
-func PrintError(path string, message string) {
-	fmt.Printf("| %-60s | %s |\n", runewidth.Truncate(path, 50, "..."), message)
-	//fmt.Printf("| %-20s | %-20s |\n", path, message)
+func Writef(format string, a ...any) {
+	_, _ = writer.Write([]byte(fmt.Sprintf(format, a...)))
 }
 
-func PrintTable(table [][]string) {
+func Writeln(a ...any) {
+	_, _ = writer.Write([]byte(fmt.Sprintln(a...)))
+}
+
+func WriteTable(table [][]string) {
 	// get number of columns from the first table row
 	columnLengths := make([]int, len(table[0]))
 	for _, line := range table {
@@ -70,4 +68,14 @@ func PrintTable(table [][]string) {
 			fmt.Printf("+%s+\n", strings.Repeat("-", lineLength-2)) // lineLength-2 because of "+" as first and last character
 		}
 	}
+}
+
+func Progress(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	fmt.Printf("%s\r", runewidth.Truncate(msg, maxWidth-3, "..."))
+}
+func ProgressEnd(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
+	fmt.Printf("%s\r", runewidth.FillLeft(" ", maxWidth))
+	fmt.Println(msg)
 }

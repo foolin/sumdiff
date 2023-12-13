@@ -1,7 +1,12 @@
 package app
 
 import (
+	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
 	"fmt"
+	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/util"
 	"github.com/foolin/sumdiff/internal/vo"
 	"hash"
@@ -10,6 +15,25 @@ import (
 	"path/filepath"
 	"strings"
 )
+
+func HashWithArgs(args ...string) (results []vo.HashVo, err error) {
+	t := strings.ToLower(args[0])
+	var algo hash.Hash
+	switch t {
+	case "md5":
+		algo = md5.New()
+	case "sha1":
+		algo = sha1.New()
+	case "sha256":
+		algo = sha256.New()
+	case "sha512":
+		algo = sha512.New()
+	default:
+		plog.Writef("not support algo=%v", t)
+		return
+	}
+	return Hash(algo, args[1:]...)
+}
 
 func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	if len(paths) == 0 {
