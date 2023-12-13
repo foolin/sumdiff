@@ -6,11 +6,18 @@ import (
 	"strings"
 )
 
-func ListPath(path string) (map[string]PathInfo, error) {
+func ListFiles(path string) (map[string]PathInfo, error) {
+	return ListPath(path, true)
+}
+
+func ListPath(path string, onlyFile bool) (map[string]PathInfo, error) {
 	data := make(map[string]PathInfo)
 	err := WalkPath(path, func(info PathInfo, err error) error {
 		if err != nil {
 			return err
+		}
+		if onlyFile {
+			return nil
 		}
 		data[info.Relative] = info
 		return nil
@@ -37,4 +44,11 @@ type PathInfo struct {
 	Relative string
 	Path     string
 	Info     fs.FileInfo
+}
+
+func FileType(isDir bool) string {
+	if isDir {
+		return "dir"
+	}
+	return "file"
 }
