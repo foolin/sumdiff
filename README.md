@@ -11,3 +11,11 @@ sumdiff hash md5 file|dir
 sumdiff hash sha256 file|dir
 sumdiff hash sha512 file|dir
 ```
+
+## Install
+linux:
+```shell
+
+tar -xvf sumdiff_Linux_x86_64.tar.gz && sudo mv sumdiff /usr/local/bin
+
+```

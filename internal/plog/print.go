@@ -11,7 +11,7 @@ import (
 const maxWidth = 100
 
 var printer io.Writer = os.Stdout
-var writer io.Writer = os.Stderr
+var writer io.Writer = os.Stdout
 
 func Print(a ...any) {
 	_, _ = printer.Write([]byte(fmt.Sprint(a...)))
