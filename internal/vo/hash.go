@@ -3,9 +3,10 @@ package vo
 import "fmt"
 
 type HashVo struct {
-	Path string `json:"path"`
-	Size int64  `json:"size"`
-	Hash string `json:"hash"`
+	Path  string `json:"path"`
+	Size  int64  `json:"size"`
+	Hash  string `json:"hash"`
+	Error error  `json:"error"`
 }
 
 func HashToTable(list []HashVo) [][]string {

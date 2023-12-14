@@ -28,11 +28,11 @@ func Diff(path1, path2 string) (bool, error) {
 }
 
 func DiffDir(path1, path2 string) (bool, error) {
-	data1, err := util.ListPath(path1)
+	data1, err := util.ListPath(path1, false)
 	if err != nil {
 		return false, err
 	}
-	data2, err := util.ListPath(path2)
+	data2, err := util.ListPath(path2, false)
 	if err != nil {
 		return false, err
 	}

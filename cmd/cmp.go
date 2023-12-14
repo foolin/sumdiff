@@ -1,39 +1,40 @@
 /*
-Copyright © 2023 Foolin
+Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
 package cmd
 
 import (
 	"github.com/foolin/sumdiff/internal/app"
 	"github.com/foolin/sumdiff/internal/plog"
+	"github.com/foolin/sumdiff/internal/vo"
+
 	"github.com/spf13/cobra"
 )
 
-// diffCmd represents the diff command
-var diffCmd = &cobra.Command{
-	Use:   "diff <path1> <path2>",
-	Short: "Compare whether two files or directory are different",
-	Long:  `Compare whether two files or directory are different`,
-	Args:  cobra.MinimumNArgs(2),
+// cmpCmd represents the cmp command
+var cmpCmd = &cobra.Command{
+	Use:   "cmp",
+	Short: "Comparing different files or directory",
+	Long:  `Comparing different files or directory`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ret, err := app.Diff(args[0], args[1])
+		_, list, err := app.Cmp(args[0], args[1])
 		if err != nil {
 			plog.Writeln(err.Error())
 		}
-		plog.Writeln(ret)
+		plog.WriteTable(vo.CmpToTable(list))
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(diffCmd)
+	rootCmd.AddCommand(cmpCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	diffCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// cmpCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	diffCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// cmpCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
