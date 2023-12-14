@@ -6,6 +6,7 @@ package cmd
 import (
 	"github.com/foolin/sumdiff/internal/app"
 	"github.com/foolin/sumdiff/internal/plog"
+	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/spf13/cobra"
 )
@@ -18,6 +19,7 @@ var hashCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		results, err := app.HashWithArgs(args...)
+		statusbar.Clean()
 		if err != nil {
 			plog.Writeln(err)
 			return

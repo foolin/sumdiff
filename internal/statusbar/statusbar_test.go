@@ -9,7 +9,7 @@ import (
 
 func TestStatusbar_Show(t *testing.T) {
 	bar := New()
-	defer bar.Stop()
+	defer bar.Clean()
 	millis := int((time.Second * 10).Milliseconds())
 	hash := sha512.New()
 	for i := 0; i < millis; i++ {
@@ -24,7 +24,7 @@ func TestStatusbar_Show(t *testing.T) {
 
 func TestStatusbar_Show2(t *testing.T) {
 	bar := New()
-	defer bar.Stop()
+	defer bar.Clean()
 	seconds := 20
 	hash := sha512.New()
 	for i := 0; i < seconds; i++ {

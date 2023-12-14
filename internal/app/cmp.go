@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"github.com/foolin/sumdiff/internal/plog"
+	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
 	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/hashicorp/go-multierror"
@@ -62,7 +62,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	notEqualCount := 0
 	retList := make([]*vo.CmpVo, 0)
 	for k, v1 := range data1 {
-		plog.Progress("compare path " + k)
+		statusbar.Display("compare path " + k)
 		itemResult := vo.NewCmpVo(k, k)
 		itemResult.X.Size = v1.Info.Size()
 		itemResult.OK = false

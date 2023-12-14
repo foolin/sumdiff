@@ -26,6 +26,8 @@ func DefaultOption() *Option {
 	}
 }
 
+var defaultStatusBar = New()
+
 func New(optFns ...func(option *Option)) *Statusbar {
 	opt := DefaultOption()
 	for _, fn := range optFns {
@@ -61,17 +63,29 @@ func (r *Statusbar) doStart() {
 	}()
 }
 
-func (r *Statusbar) Stop() {
+func (r *Statusbar) Clean() {
 	r.ticker.Stop()
 	fmt.Printf("%v\r", runewidth.FillLeft(" ", r.option.MaxWidth))
 }
 
-func Display(r *Statusbar, format string, a ...any) bool {
+func DisplayWithStatusbar(r *Statusbar, format string, a ...any) bool {
 	if r == nil {
 		return false
 	}
 	r.Display(format, a...)
 	return true
+}
+
+func Display(format string, a ...any) bool {
+	return DisplayWithStatusbar(defaultStatusBar, format, a...)
+}
+
+func Clean() bool {
+	if defaultStatusBar != nil {
+		defaultStatusBar.Clean()
+		return true
+	}
+	return false
 }
 
 var strwidth = &runewidth.Condition{

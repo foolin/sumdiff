@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"github.com/foolin/sumdiff/internal/plog"
+	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
 	"os"
 	"strings"
@@ -40,7 +40,7 @@ func DiffDir(path1, path2 string) (bool, error) {
 		return false, fmt.Errorf("not equal files count [%v!=%v]", len(data1), len(data2))
 	}
 	for k, v1 := range data1 {
-		plog.Progress("compare diff path " + k)
+		statusbar.Display("compare diff path " + k)
 		v2, ok := data2[k]
 		if !ok {
 			return false, fmt.Errorf("path2 not exist path %v", k)

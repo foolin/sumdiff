@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
-	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/util"
 	"github.com/foolin/sumdiff/internal/vo"
 	"hash"
@@ -29,8 +28,7 @@ func HashWithArgs(args ...string) (results []vo.HashVo, err error) {
 	case "sha512":
 		algo = sha512.New()
 	default:
-		plog.Writef("not support algo=%v", t)
-		return
+		return nil, fmt.Errorf("not support algo=%v", t)
 	}
 	return Hash(algo, args[1:]...)
 }
