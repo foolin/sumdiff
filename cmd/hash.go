@@ -4,7 +4,7 @@ Copyright © 2023 Foolin
 package cmd
 
 import (
-	"github.com/foolin/sumdiff/internal/app"
+	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/vo"
@@ -18,7 +18,7 @@ var hashCmd = &cobra.Command{
 	Long:  `Calculate hash algorithm [md5|sha1|sha256|sha512] hex string, eg: hash sha1 a.text`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		results, err := app.HashWithArgs(args...)
+		results, err := sumdiff.HashWithArgs(args...)
 		statusbar.Clean()
 		if err != nil {
 			plog.Writeln(err)

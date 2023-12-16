@@ -1,4 +1,4 @@
-package app
+package sumdiff
 
 import (
 	"crypto/md5"
@@ -6,13 +6,14 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
-	"github.com/foolin/sumdiff/internal/util"
-	"github.com/foolin/sumdiff/internal/vo"
 	"hash"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/foolin/sumdiff/internal/util"
+	"github.com/foolin/sumdiff/internal/vo"
 )
 
 func HashWithArgs(args ...string) (results []vo.HashVo, err error) {

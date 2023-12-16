@@ -1,8 +1,9 @@
-package app
+package sumdiff
 
 import (
-	"github.com/foolin/sumdiff/internal/util"
 	"testing"
+
+	"github.com/foolin/sumdiff/internal/util"
 )
 
 func TestCmpFile(t *testing.T) {

@@ -1,4 +1,4 @@
-package app
+package sumdiff
 
 import (
 	"crypto/sha1"

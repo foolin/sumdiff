@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/foolin/sumdiff/internal/app"
+	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/vo"
@@ -18,7 +18,7 @@ var cmpCmd = &cobra.Command{
 	Short: "Comparing different files or directory",
 	Long:  `Comparing different files or directory`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, list, err := app.Cmp(args[0], args[1])
+		_, list, err := sumdiff.Cmp(args[0], args[1])
 		statusbar.Clean()
 		if err != nil {
 			plog.Writeln(err.Error())

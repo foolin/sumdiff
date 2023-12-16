@@ -4,7 +4,7 @@ Copyright © 2023 Foolin
 package cmd
 
 import (
-	"github.com/foolin/sumdiff/internal/app"
+	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/spf13/cobra"
@@ -17,7 +17,7 @@ var diffCmd = &cobra.Command{
 	Long:  `Compare whether two files or directory are different`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		ret, err := app.Diff(args[0], args[1])
+		ret, err := sumdiff.Diff(args[0], args[1])
 		statusbar.Clean()
 		if err != nil {
 			plog.Writeln(err.Error())

@@ -1,5 +1,5 @@
 install:
-	go install ./
+	go install ./app/
 
 tools:
 	#go install github.com/goreleaser/goreleaser@latest
