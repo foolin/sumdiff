@@ -48,3 +48,20 @@ func CmpToTable(list []*CmpVo) [][]string {
 	}
 	return out
 }
+
+func CmpToLiteTable(list []*CmpVo) [][]string {
+	out := make([][]string, len(list)+1)
+	out[0] = []string{"Path", "OK", "Msg"}
+	for i, v := range list {
+		path := v.X.Path
+		if path == "" {
+			path = v.Y.Path
+		}
+		out[i+1] = []string{
+			path,
+			fmt.Sprintf("%v", v.OK),
+			v.Msg,
+		}
+	}
+	return out
+}

@@ -2,17 +2,18 @@ package sumdiff
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
 	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/hashicorp/go-multierror"
-	"os"
 )
 
 func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	result := vo.NewCmpVo(path1, path2)
 	result.OK = false
-	var outError *multierror.Error
+	var outError error
 	s1, err := os.Stat(path1)
 	if err != nil {
 		result.X.Error = err
@@ -41,7 +42,7 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 }
 
 func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
-	var outError *multierror.Error
+	var outError error
 	outResult := vo.NewCmpVo(path1, path2)
 	data1, err := util.ListPath(path1, false)
 	if err != nil {
@@ -90,7 +91,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		}
 		//File check file md5
 		if !v1.Info.IsDir() {
-			var itemError *multierror.Error
+			var itemError error
 			h1, err := util.Sha256(v1.Path)
 			if err != nil {
 				itemResult.X.Error = err
@@ -148,7 +149,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 
 func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 	result := vo.NewCmpVo(file1, file2)
-	var outError *multierror.Error
+	var outError error
 
 	f1, err := os.Stat(file1)
 	if err != nil {

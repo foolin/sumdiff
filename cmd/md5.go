@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"crypto/md5"
+
 	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
@@ -29,14 +31,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// hashCmd represents the hash command
-var hashCmd = &cobra.Command{
-	Use:   "hash <algorithm> <path> ...",
-	Short: "Calculate hash algorithm [md5|sha1|sha256|sha512] hex string",
-	Long:  `Calculate hash algorithm [md5|sha1|sha256|sha512] hex string, eg: hash sha1 a.text`,
-	Args:  cobra.MinimumNArgs(2),
+// md5Cmd represents the md5 command
+var md5Cmd = &cobra.Command{
+	Use:   "md5 <path> ...",
+	Short: "Calculate md5 hex string",
+	Long:  `Calculate md5 hex string, eg: hash sha1 a.text`,
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		results, err := sumdiff.HashWithArgs(args...)
+		results, err := sumdiff.Hash(md5.New(), args...)
 		statusbar.Clean()
 		if err != nil {
 			plog.Writeln(err)
@@ -47,15 +49,15 @@ var hashCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(hashCmd)
+	rootCmd.AddCommand(md5Cmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// hashCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// md5Cmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// hashCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// md5Cmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
