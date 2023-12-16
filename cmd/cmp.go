@@ -36,12 +36,13 @@ var cmpCmd = &cobra.Command{
 	Short: "Comparing different files or directory",
 	Long:  `Comparing different files or directory`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, list, err := sumdiff.Cmp(args[0], args[1])
+		ok, list, err := sumdiff.Cmp(args[0], args[1])
 		statusbar.Clean()
 		if err != nil {
-			plog.Writeln("Hash error:", err)
+			plog.Writeln("Happen error:", err)
 		}
 		plog.WriteTable(vo.CmpToLiteTable(list))
+		plog.Writeln(ok)
 	},
 }
 
