@@ -10,3 +10,4 @@ sumdiff diff file1 file2
 sumdiff diff dir1 dir2
 ```
 a=b:true
+a=d:false
