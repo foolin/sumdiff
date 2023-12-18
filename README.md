@@ -7,16 +7,16 @@ Compare tools for directory and files.
 * Compare the two files or directories are different
 `sumdiff diff <path1> <path2>`
 
-- Example1:
+Example1:
 ```shell
 sumdiff diff test_data/a.txt test_data/b.txt 
 ```
-Output:
+Output1:
 ```text                                                                               
 true
 ```
 
-- Example2:
+Example2:
 ```shell
 sumdiff diff test_data/c.txt test_data/d.txt 
 ```
@@ -29,7 +29,7 @@ false
 * Compare the two file or directory differences
   `sumdiff diff <path1> <path2>`
 
-- Example:
+Example:
 ```shell
 sumdiff cmp test_data/data1 test_data/data3
 ```
@@ -50,7 +50,7 @@ false
 Calculate the MD5 hexadecimal value of the files or directories
 `sumdiff md5 <path1> [<path2>] [<path3>] ...`
 
-- Example:
+Example:
 ```shell
 sumdiff md5 test_data/a.txt
 ```
@@ -67,7 +67,7 @@ Output:
 Calculate the MD5 hexadecimal value of the files or directories
 `sumdiff sha1 <path1> [<path2>] [<path3>] ...`
 
-- Example:
+Example:
 ```shell
 sumdiff sha1 test_data/data1
 ```
@@ -84,7 +84,7 @@ Output:
 ## `Sha256` - Get SHA256 hash value
 `sumdiff sha256 <path1> [<path2>] [<path3>] ...`
 
-- Example:
+Example:
 ```shell
 sumdiff sha256 test_data/a.txt test_data/c.txt
 ```
@@ -102,7 +102,7 @@ Output:
 Calculate the  hash(md5|sha1|sha256|sha512) value of a file or directory
 `sumdiff hash <md5|sha1|sha256|sha512> <path1> [<path2>] [<path3>] ...`
 
-- Example:
+Example:
 ```shell
 sumdiff hash sha512 test_data/a.txt
 ```
