@@ -22,25 +22,33 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"github.com/foolin/sumdiff/internal/plog"
 	"os"
 
 	"github.com/spf13/cobra"
 )
 
+var verbose bool
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "sumdiff",
-	Short: "A useful file comparison tool",
-	Long:  `A useful file comparison tool`,
+	Short: "A useful comparison tool for differences",
+	Long:  `A useful comparison tool for differences and hash`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		//fmt.Println("verbose:", verbose)
+		plog.SetVerbose(verbose)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
+
 	if err != nil {
 		os.Exit(1)
 	}
@@ -52,8 +60,9 @@ func init() {
 	// will be global for your application.
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sumdiff.yaml)")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output detail info")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

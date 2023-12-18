@@ -13,15 +13,30 @@ const maxWidth = 100
 var printer io.Writer = os.Stdout
 var writer io.Writer = os.Stdout
 
+var verbose bool = false
+
+func SetVerbose(v bool) {
+	verbose = v
+}
+
 func Print(a ...any) {
+	if !verbose {
+		return
+	}
 	_, _ = printer.Write([]byte(fmt.Sprint(a...)))
 }
 
 func Printf(format string, a ...any) {
+	if !verbose {
+		return
+	}
 	_, _ = printer.Write([]byte(fmt.Sprintf(format, a...)))
 }
 
 func Println(a ...any) {
+	if !verbose {
+		return
+	}
 	_, _ = printer.Write([]byte(fmt.Sprintln(a...)))
 }
 

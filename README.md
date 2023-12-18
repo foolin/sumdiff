@@ -20,7 +20,6 @@ Available Commands:
 
 Flags:
   -h, --help     help for sumdiff
-  -t, --toggle   Help message for toggle
 
 Use "sumdiff [command] --help" for more information about a command.
 
@@ -28,37 +27,39 @@ Use "sumdiff [command] --help" for more information about a command.
 
 # Usage
 
-### `sumdiff cmp` - Compare different true or false
-  * Compare the two files or directories are different
-  `sumdiff diff <path1> <path2>`
-  
-  Example1:
-  ```shell
-  sumdiff diff test_data/a.txt test_data/b.txt 
-  ```
-  Output1:
-  ```text                                                                               
-  true
-  ```
-  
-  Example2:
-  ```shell
-  sumdiff diff test_data/c.txt test_data/d.txt 
-  ```
-  Output2:
-  ```text                                                                                                                                                                    
-  false
-  ```
+### `sumdiff eq` - Compare equal
+* Compare the two files or directories are equal
+  `sumdiff eq <path1> <path2>`
 
-### `sumdiff diff` - Compare differences
-  * Compare the two file or directory differences
-    `sumdiff diff <path1> <path2>`
-  
-  Example:
+  Example1:
+    ```shell
+    sumdiff eq test_data/a.txt test_data/b.txt 
+    ```
+  Output1:
+    ```text                                                                               
+    true
+    ```
+    
+  Example2:
+    ```shell
+    sumdiff eq test_data/c.txt test_data/d.txt 
+    ```
+  Output2:
+    ```text                                                                                                                                                                    
+    false
+    ```
+
+
+
+### `sumdiff cmp` - Compare different true or false
+* Compare the two file or directory differences
+  `sumdiff diff <path1> <path2>`
+
+Example:
   ```shell
   sumdiff cmp test_data/data1 test_data/data3
   ```
-  Output:
+Output:
   ```text                                                                               
   +-------------------------------------------+                                                       
   | Path   | OK    | Msg                      |
@@ -70,6 +71,7 @@ Use "sumdiff [command] --help" for more information about a command.
   +-------------------------------------------+
   false
   ```
+
 
 ### `sumdiff md5` - Get MD5 hash value
   Calculate the MD5 hexadecimal value of the files or directories

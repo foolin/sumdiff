@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Diff(path1, path2 string) (bool, error) {
+func Equal(path1, path2 string) (bool, error) {
 	s1, err := os.Stat(path1)
 	if err != nil {
 		return false, err
@@ -21,13 +21,13 @@ func Diff(path1, path2 string) (bool, error) {
 		return false, fmt.Errorf("not equal is directory [%v!=%v]", s1.IsDir(), s2.IsDir())
 	}
 	if s1.IsDir() {
-		return DiffDir(path1, path2)
+		return EqualDir(path1, path2)
 	} else {
-		return DiffFile(path1, path2)
+		return EqualFile(path1, path2)
 	}
 }
 
-func DiffDir(path1, path2 string) (bool, error) {
+func EqualDir(path1, path2 string) (bool, error) {
 	data1, err := util.ListPath(path1, false)
 	if err != nil {
 		return false, err
@@ -82,7 +82,7 @@ func DiffDir(path1, path2 string) (bool, error) {
 	return true, nil
 }
 
-func DiffFile(file1, file2 string) (bool, error) {
+func EqualFile(file1, file2 string) (bool, error) {
 	f1, err := os.Stat(file1)
 	if err != nil {
 		return false, err

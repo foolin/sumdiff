@@ -41,10 +41,14 @@ var sha1Cmd = &cobra.Command{
 		results, err := sumdiff.Hash(sha1.New(), args...)
 		statusbar.Clean()
 		if err != nil {
-			plog.Writeln(err)
+			plog.Println(err)
 			return
 		}
-		plog.WriteTable(vo.HashToTable(results))
+		if len(results) == 1 {
+			plog.Writeln(results[0].Hash)
+		} else {
+			plog.WriteTable(vo.HashToTable(results))
+		}
 	},
 }
 
