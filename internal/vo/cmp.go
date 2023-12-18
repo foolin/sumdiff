@@ -3,10 +3,10 @@ package vo
 import "fmt"
 
 type CmpVo struct {
-	X   *HashVo `json:"x"`
-	Y   *HashVo `json:"y"`
-	OK  bool    `json:"ok"`
-	Msg string  `json:"msg"`
+	X     *HashVo `json:"x"`
+	Y     *HashVo `json:"y"`
+	Equal bool    `json:"equal"`
+	Msg   string  `json:"msg"`
 }
 
 func NewCmpVo(path1, path2 string) *CmpVo {
@@ -23,14 +23,14 @@ func NewCmpVo(path1, path2 string) *CmpVo {
 			Hash:  "",
 			Error: nil,
 		},
-		OK:  false,
-		Msg: "",
+		Equal: false,
+		Msg:   "",
 	}
 }
 
 func CmpToTable(list []*CmpVo) [][]string {
 	out := make([][]string, len(list)+1)
-	out[0] = []string{"Path", "Size1", "Size2", "Hash1", "Hash2", "OK", "Msg"}
+	out[0] = []string{"Path", "Size1", "Size2", "Hash1", "Hash2", "Equal", "Msg"}
 	for i, v := range list {
 		path := v.X.Path
 		if path == "" {
@@ -42,7 +42,7 @@ func CmpToTable(list []*CmpVo) [][]string {
 			fmt.Sprintf("%v", v.Y.Size),
 			v.X.Hash,
 			v.Y.Hash,
-			fmt.Sprintf("%v", v.OK),
+			fmt.Sprintf("%v", v.Equal),
 			v.Msg,
 		}
 	}
@@ -51,7 +51,7 @@ func CmpToTable(list []*CmpVo) [][]string {
 
 func CmpToLiteTable(list []*CmpVo) [][]string {
 	out := make([][]string, len(list)+1)
-	out[0] = []string{"Path", "OK", "Msg"}
+	out[0] = []string{"Path", "Equal", "Msg"}
 	for i, v := range list {
 		path := v.X.Path
 		if path == "" {
@@ -59,7 +59,7 @@ func CmpToLiteTable(list []*CmpVo) [][]string {
 		}
 		out[i+1] = []string{
 			path,
-			fmt.Sprintf("%v", v.OK),
+			fmt.Sprintf("%v", v.Equal),
 			v.Msg,
 		}
 	}

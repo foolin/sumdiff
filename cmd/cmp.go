@@ -41,8 +41,8 @@ var cmpCmd = &cobra.Command{
 		if err != nil {
 			plog.Println("Happen error:", err)
 		}
-		plog.Println("result:", ok)
 		plog.WriteTable(vo.CmpToLiteTable(list))
+		plog.Println("result:", ok)
 	},
 }
 

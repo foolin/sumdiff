@@ -12,7 +12,7 @@ import (
 
 func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	result := vo.NewCmpVo(path1, path2)
-	result.OK = false
+	result.Equal = false
 	var outError error
 	s1, err := os.Stat(path1)
 	if err != nil {
@@ -29,7 +29,8 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		return false, []*vo.CmpVo{result}, outError
 	}
 	if s1.IsDir() != s2.IsDir() {
-		result.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(s1.IsDir()), util.FileType(s2.IsDir()))
+		//result.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(s1.IsDir()), util.FileType(s2.IsDir()))
+		result.Msg = "not equal file type"
 		return false, []*vo.CmpVo{result}, outError
 	}
 
@@ -55,7 +56,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		outError = multierror.Append(outError, err)
 	}
 	if outError != nil {
-		outResult.OK = false
+		outResult.Equal = false
 		outResult.Msg = outError.Error()
 		return false, []*vo.CmpVo{outResult}, outError
 	}
@@ -66,11 +67,12 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		statusbar.Display("compare path " + k)
 		itemResult := vo.NewCmpVo(k, k)
 		itemResult.X.Size = v1.Info.Size()
-		itemResult.OK = false
+		itemResult.Equal = false
 		v2, ok := data2[k]
 		if !ok {
 			itemResult.Y.Error = fmt.Errorf("not exist [%v]", k)
-			itemResult.Msg = fmt.Sprintf("path2 not exist [%v]", k)
+			//itemResult.Msg = fmt.Sprintf("path2 not exist [%v]", k)
+			itemResult.Msg = "path2 not exist"
 			retList = append(retList, itemResult)
 			notEqualCount++
 			continue
@@ -78,13 +80,15 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			itemResult.Y.Size = v2.Info.Size()
 		}
 		if v1.Info.Size() != v2.Info.Size() {
-			itemResult.Msg = fmt.Sprintf("size not equal [ %v != %v ]", v1.Info.Size(), v2.Info.Size())
+			//itemResult.Msg = fmt.Sprintf("size not equal [ %v != %v ]", v1.Info.Size(), v2.Info.Size())
+			itemResult.Msg = "not equal size"
 			retList = append(retList, itemResult)
 			notEqualCount++
 			continue
 		}
 		if v1.Info.IsDir() != v2.Info.IsDir() {
-			itemResult.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(v1.Info.IsDir()), util.FileType(v2.Info.IsDir()))
+			//itemResult.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(v1.Info.IsDir()), util.FileType(v2.Info.IsDir()))
+			itemResult.Msg = fmt.Sprintf("not equal file type")
 			retList = append(retList, itemResult)
 			notEqualCount++
 			continue
@@ -115,7 +119,8 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 				continue
 			}
 			if h1 != h2 {
-				itemResult.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
+				//itemResult.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
+				itemResult.Msg = "not equal hash"
 				retList = append(retList, itemResult)
 				notEqualCount++
 				continue
@@ -126,7 +131,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			//目录相同
 		}
 
-		itemResult.OK = true
+		itemResult.Equal = true
 		itemResult.Msg = ""
 		retList = append(retList, itemResult)
 
@@ -137,9 +142,10 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		for k, v2 := range data2 {
 			itemResult := vo.NewCmpVo(k, k)
 			itemResult.Y.Size = v2.Info.Size()
-			itemResult.OK = false
+			itemResult.Equal = false
 			itemResult.X.Error = fmt.Errorf("not exist [%v]", k)
-			itemResult.Msg = fmt.Sprintf("path1 not exist [%v]", k)
+			//itemResult.Msg = fmt.Sprintf("path1 not exist [%v]", k)
+			itemResult.Msg = "not exist path1"
 			retList = append(retList, itemResult)
 			notEqualCount++
 		}
@@ -175,21 +181,23 @@ func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 		result.Y.Error = err
 		outError = multierror.Append(outError, err)
 	}
-	result.OK = false
+	result.Equal = false
 	if outError != nil {
 		result.Msg = outError.Error()
 		return false, result, outError
 	}
 	if f1.Size() != f2.Size() {
-		result.Msg = fmt.Sprintf("size not equal [ %v != %v ]", f1.Size(), f2.Size())
+		//result.Msg = fmt.Sprintf("size not equal [ %v != %v ]", f1.Size(), f2.Size())
+		result.Msg = "not equal size"
 		return false, result, outError
 	}
 	if h1 != h2 {
-		result.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
+		//result.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
+		result.Msg = "not equal hash"
 		return false, result, outError
 	}
 
-	result.OK = true
+	result.Equal = true
 	result.Msg = "equal"
 	return true, result, nil
 }
