@@ -2,16 +2,16 @@
 Compare tools for directory and files.
 
 ```
-sumdiff -h
-A useful file comparison tool
+sumdiff  --help
+A useful comparison tool for differences and hash
 
 Usage:
   sumdiff [command]
 
 Available Commands:
-  cmp         Comparing different files or directory
+  cmp         Compare the two files or directories are different
   completion  Generate the autocompletion script for the specified shell
-  diff        Compare whether two files or directory are different
+  eq          Compare whether two files or directory are equal
   hash        Calculate hash algorithm [md5|sha1|sha256|sha512] hex string
   help        Help about any command
   md5         Calculate md5 hex string
@@ -19,7 +19,8 @@ Available Commands:
   sha256      Calculate sha256 hex string
 
 Flags:
-  -h, --help     help for sumdiff
+  -h, --help      help for sumdiff
+  -v, --verbose   Verbose output info
 
 Use "sumdiff [command] --help" for more information about a command.
 
