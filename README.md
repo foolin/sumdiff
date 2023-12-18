@@ -3,117 +3,117 @@ Compare tools for directory and files.
 
 # Usage
 
-## `Cmp` - Compare different true or false
-* Compare the two files or directories are different
-`sumdiff diff <path1> <path2>`
-
-Example1:
-```shell
-sumdiff diff test_data/a.txt test_data/b.txt 
-```
-Output1:
-```text                                                                               
-true
-```
-
-Example2:
-```shell
-sumdiff diff test_data/c.txt test_data/d.txt 
-```
-Output2:
-```text                                                                                                                                                                    
-false
-```
-
-## `Diff` - Compare differences
-* Compare the two file or directory differences
+### `sumdiff cmp` - Compare different true or false
+  * Compare the two files or directories are different
   `sumdiff diff <path1> <path2>`
+  
+  Example1:
+  ```shell
+  sumdiff diff test_data/a.txt test_data/b.txt 
+  ```
+  Output1:
+  ```text                                                                               
+  true
+  ```
+  
+  Example2:
+  ```shell
+  sumdiff diff test_data/c.txt test_data/d.txt 
+  ```
+  Output2:
+  ```text                                                                                                                                                                    
+  false
+  ```
 
-Example:
-```shell
-sumdiff cmp test_data/data1 test_data/data3
-```
-Output:
-```text                                                                               
-+-------------------------------------------+                                                       
-| Path   | OK    | Msg                      |
-+-------------------------------------------+
-|        | true  |                          |
-| /a.txt | true  |                          |
-| /b.txt | true  |                          |
-| /c.txt | false | path1 not exist [/c.txt] |
-+-------------------------------------------+
-false
-```
+### `sumdiff diff` - Compare differences
+  * Compare the two file or directory differences
+    `sumdiff diff <path1> <path2>`
+  
+  Example:
+  ```shell
+  sumdiff cmp test_data/data1 test_data/data3
+  ```
+  Output:
+  ```text                                                                               
+  +-------------------------------------------+                                                       
+  | Path   | OK    | Msg                      |
+  +-------------------------------------------+
+  |        | true  |                          |
+  | /a.txt | true  |                          |
+  | /b.txt | true  |                          |
+  | /c.txt | false | path1 not exist [/c.txt] |
+  +-------------------------------------------+
+  false
+  ```
 
-## `Md5` - Get MD5 hash value
-Calculate the MD5 hexadecimal value of the files or directories
-`sumdiff md5 <path1> [<path2>] [<path3>] ...`
+### `sumdiff md5` - Get MD5 hash value
+  Calculate the MD5 hexadecimal value of the files or directories
+  `sumdiff md5 <path1> [<path2>] [<path3>] ...`
+  
+  Example:
+  ```shell
+  sumdiff md5 test_data/a.txt
+  ```
+  Output:
+  ```text                                                                               
+  +-----------------------------------------------------------+                                       
+  | Hash                             | Size | Path            |
+  +-----------------------------------------------------------+
+  | 9d15fa011b54dbd079d1d20e36e4a358 | 212  | test_data/a.txt |
+  +-----------------------------------------------------------+
+  ```
 
-Example:
-```shell
-sumdiff md5 test_data/a.txt
-```
-Output:
-```text                                                                               
-+-----------------------------------------------------------+                                       
-| Hash                             | Size | Path            |
-+-----------------------------------------------------------+
-| 9d15fa011b54dbd079d1d20e36e4a358 | 212  | test_data/a.txt |
-+-----------------------------------------------------------+
-```
+### `sumdiff sha1` - Get SHA1 hash value
+  Calculate the MD5 hexadecimal value of the files or directories
+  `sumdiff sha1 <path1> [<path2>] [<path3>] ...`
+  
+  Example:
+  ```shell
+  sumdiff sha1 test_data/data1
+  ```
+  Output:
+  ```text                                                                               
+  +---------------------------------------------------------------+                                   
+  | Hash                                     | Size | Path        |
+  +---------------------------------------------------------------+
+  | 18b012c3e30bf822589ac96fd4d87e6e8d89754e | 4096 | data1/a.txt |
+  | 9c678f3b44c0918f5695e5a0a8232ab1b017a4a4 | 4096 | data1/b.txt |
+  +---------------------------------------------------------------+
+  ```
 
-## `Sha1` - Get SHA1 hash value
-Calculate the MD5 hexadecimal value of the files or directories
-`sumdiff sha1 <path1> [<path2>] [<path3>] ...`
+### `sumdiff sha256` - Get SHA256 hash value
+  `sumdiff sha256 <path1> [<path2>] [<path3>] ...`
+  
+  Example:
+  ```shell
+  sumdiff sha256 test_data/a.txt test_data/c.txt
+  ```
+  Output:
+  ```text                                                                               
+  +-------------------------------------------------------------------------------------------+       
+  | Hash                                                             | Size | Path            |
+  +-------------------------------------------------------------------------------------------+
+  | bb3cf386d0c975847024b0d78c9f92c0657c894f16c1db1248233cfe2b05b65f | 212  | test_data/a.txt |
+  | 732d2d9a2c39480fa38bd060f07b3e55eb3b47888e8019a8d4cfd8600d5c104f | 222  | test_data/c.txt |
+  +-------------------------------------------------------------------------------------------+
+  ```
 
-Example:
-```shell
-sumdiff sha1 test_data/data1
-```
-Output:
-```text                                                                               
-+---------------------------------------------------------------+                                   
-| Hash                                     | Size | Path        |
-+---------------------------------------------------------------+
-| 18b012c3e30bf822589ac96fd4d87e6e8d89754e | 4096 | data1/a.txt |
-| 9c678f3b44c0918f5695e5a0a8232ab1b017a4a4 | 4096 | data1/b.txt |
-+---------------------------------------------------------------+
-```
-
-## `Sha256` - Get SHA256 hash value
-`sumdiff sha256 <path1> [<path2>] [<path3>] ...`
-
-Example:
-```shell
-sumdiff sha256 test_data/a.txt test_data/c.txt
-```
-Output:
-```text                                                                               
-+-------------------------------------------------------------------------------------------+       
-| Hash                                                             | Size | Path            |
-+-------------------------------------------------------------------------------------------+
-| bb3cf386d0c975847024b0d78c9f92c0657c894f16c1db1248233cfe2b05b65f | 212  | test_data/a.txt |
-| 732d2d9a2c39480fa38bd060f07b3e55eb3b47888e8019a8d4cfd8600d5c104f | 222  | test_data/c.txt |
-+-------------------------------------------------------------------------------------------+
-```
-
-## `Hash` - Get Other hash value 
-Calculate the  hash(md5|sha1|sha256|sha512) value of a file or directory
-`sumdiff hash <md5|sha1|sha256|sha512> <path1> [<path2>] [<path3>] ...`
-
-Example:
-```shell
-sumdiff hash sha512 test_data/a.txt
-```
-Output:
-```text                                                                               
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Hash                                                                                                                             | Size | Path            |
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 9683aedddcc5b16548f3510580d91306fad405070fd516299e3f5609bff5fd950a1a6e39e8bce5000d4f3c264428855eb2ae0f235f55d89bd9ec2c9f02c86c4b | 212  | test_data/a.txt |
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
-```
+### `sumdiff hash` - Get Other hash value 
+  Calculate the  hash(md5|sha1|sha256|sha512) value of a file or directory
+  `sumdiff hash <md5|sha1|sha256|sha512> <path1> [<path2>] [<path3>] ...`
+  
+  Example:
+  ```shell
+  sumdiff hash sha512 test_data/a.txt
+  ```
+  Output:
+  ```text                                                                               
+  +-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+  | Hash                                                                                                                             | Size | Path            |
+  +-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+  | 9683aedddcc5b16548f3510580d91306fad405070fd516299e3f5609bff5fd950a1a6e39e8bce5000d4f3c264428855eb2ae0f235f55d89bd9ec2c9f02c86c4b | 212  | test_data/a.txt |
+  +-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+  ```
 
 ## Help
 `sumdiff -h`
