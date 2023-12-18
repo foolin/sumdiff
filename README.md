@@ -9,15 +9,15 @@ Usage:
   sumdiff [command]
 
 Available Commands:
-  cmp         Compare the two files or directories are different
-  completion  Generate the autocompletion script for the specified shell
   eq          Compare whether two files or directory are equal
+  cmp         Compare the two files or directories are different
   hash        Calculate hash algorithm [md5|sha1|sha256|sha512] hex string
   help        Help about any command
   md5         Calculate md5 hex string
   sha1        Calculate sha1 hex string
   sha256      Calculate sha256 hex string
-
+  completion  Generate the autocompletion script for the specified shell
+  
 Flags:
   -h, --help      help for sumdiff
   -v, --verbose   Verbose output info
