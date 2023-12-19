@@ -28,11 +28,11 @@ func Equal(path1, path2 string) (bool, error) {
 }
 
 func EqualDir(path1, path2 string) (bool, error) {
-	data1, err := util.ListPath(path1, false)
+	data1, err := listPathWithStatusbar(path1)
 	if err != nil {
 		return false, err
 	}
-	data2, err := util.ListPath(path2, false)
+	data2, err := listPathWithStatusbar(path1)
 	if err != nil {
 		return false, err
 	}

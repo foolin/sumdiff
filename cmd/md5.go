@@ -38,8 +38,9 @@ var md5Cmd = &cobra.Command{
 	Long:  `Calculate md5 hex string, eg: hash sha1 a.text`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		statusbar.Start()
 		results, err := sumdiff.Hash(md5.New(), args...)
-		statusbar.Clean()
+		statusbar.Stop()
 		if err != nil {
 			plog.Println(err)
 			return

@@ -38,8 +38,9 @@ var sha1Cmd = &cobra.Command{
 	Long:  `Calculate sha1 hex string, eg: hash sha1 a.text`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		statusbar.Start()
 		results, err := sumdiff.Hash(sha1.New(), args...)
-		statusbar.Clean()
+		statusbar.Stop()
 		if err != nil {
 			plog.Println(err)
 			return

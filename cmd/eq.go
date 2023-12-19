@@ -35,8 +35,9 @@ var eqCmd = &cobra.Command{
 	Long:  `Compare whether two files or directory are equal`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		statusbar.Start()
 		ret, err := sumdiff.Equal(args[0], args[1])
-		statusbar.Clean()
+		statusbar.Stop()
 		if err != nil {
 			plog.Println(err.Error())
 		}

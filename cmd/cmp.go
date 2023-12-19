@@ -36,8 +36,9 @@ var cmpCmd = &cobra.Command{
 	Short: "Compare the two files or directories are different",
 	Long:  `Compare the two files or directories are different`,
 	Run: func(cmd *cobra.Command, args []string) {
+		statusbar.Start()
 		ok, list, err := sumdiff.Cmp(args[0], args[1])
-		statusbar.Clean()
+		statusbar.Stop()
 		if err != nil {
 			plog.Println("Happen error:", err)
 		}

@@ -36,8 +36,9 @@ var hashCmd = &cobra.Command{
 	Long:  `Calculate hash algorithm [md5|sha1|sha256|sha512] hex string, eg: hash sha1 a.text`,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		statusbar.Start()
 		results, err := sumdiff.HashWithArgs(args...)
-		statusbar.Clean()
+		statusbar.Stop()
 		if err != nil {
 			plog.Println(err)
 			return

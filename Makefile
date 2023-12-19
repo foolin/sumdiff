@@ -1,5 +1,12 @@
 install:
-	go install ./app/
+
+build:
+	mkdir -p ./bin
+	go build -o ./bin/sumdiff ./app/sumdiff.go
+
+install: build
+	sudo rm -rf /usr/local/bin/sumdiff
+	sudo cp ./bin/sumdiff /usr/local/bin/
 
 tools:
 	go install github.com/goreleaser/goreleaser@latest

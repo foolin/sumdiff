@@ -11,6 +11,10 @@ import (
 )
 
 func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
+	statusbar.Display("compare start...")
+	defer func() {
+		statusbar.Display("compare done!")
+	}()
 	result := vo.NewCmpVo(path1, path2)
 	result.Equal = false
 	var outError error
@@ -45,12 +49,12 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	var outError error
 	outResult := vo.NewCmpVo(path1, path2)
-	data1, err := util.ListPath(path1, false)
+	data1, err := listPathWithStatusbar(path1)
 	if err != nil {
 		outResult.X.Error = err
 		outError = multierror.Append(outError, err)
 	}
-	data2, err := util.ListPath(path2, false)
+	data2, err := listPathWithStatusbar(path1)
 	if err != nil {
 		outResult.Y.Error = err
 		outError = multierror.Append(outError, err)

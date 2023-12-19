@@ -7,16 +7,21 @@ import (
 )
 
 func ListFiles(path string) (map[string]PathInfo, error) {
-	return ListPath(path, true)
+	return ListPath(path, func(info PathInfo) bool {
+		if info.Info.IsDir() {
+			return false
+		}
+		return true
+	})
 }
 
-func ListPath(path string, onlyFile bool) (map[string]PathInfo, error) {
+func ListPath(path string, acceptFn func(info PathInfo) bool) (map[string]PathInfo, error) {
 	data := make(map[string]PathInfo)
 	err := WalkPath(path, func(info PathInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		if onlyFile {
+		if acceptFn != nil && !acceptFn(info) {
 			return nil
 		}
 		data[info.Relative] = info
