@@ -62,14 +62,11 @@ func (r *Statusbar) DisplayEnd(format string, a ...any) {
 func (r *Statusbar) Stop() {
 	r.ticker.Stop()
 	r.stop <- true
+	r.Clean()
 }
 
 func (r *Statusbar) Clean() {
 	fmt.Printf("%v\r", runewidth.FillLeft(" ", r.option.MaxWidth))
-}
-
-func (r *Statusbar) CleanEnd() {
-	fmt.Printf("%v\r\n", runewidth.FillLeft(" ", r.option.MaxWidth))
 }
 
 func (r *Statusbar) doStart() {

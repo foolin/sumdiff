@@ -32,7 +32,7 @@ func EqualDir(path1, path2 string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	data2, err := listPathWithStatusbar(path1)
+	data2, err := listPathWithStatusbar(path2)
 	if err != nil {
 		return false, err
 	}
