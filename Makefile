@@ -5,6 +5,7 @@ build:
 	go build -o ./bin/sumdiff ./app/sumdiff.go
 
 install: build
+	sudo rm -rf ~/go/bin/sumdiff
 	sudo rm -rf /usr/local/bin/sumdiff
 	sudo cp ./bin/sumdiff /usr/local/bin/
 
