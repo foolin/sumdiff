@@ -2,6 +2,7 @@ package util
 
 import (
 	"io/fs"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -30,10 +31,9 @@ func ListPath(path string, acceptFn func(info PathInfo) bool) (map[string]PathIn
 	return data, err
 }
 
-func WalkPath(path string, fn WalkFunc) error {
-	rootPath := path
-	return filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
-		relative := strings.TrimPrefix(path, rootPath)
+func WalkPath(root string, fn WalkFunc) error {
+	return filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
+		relative := RelativePath(path, root)
 		walkInfo := PathInfo{
 			Relative: relative,
 			Path:     path,
@@ -56,4 +56,27 @@ func FileType(isDir bool) string {
 		return "dir"
 	}
 	return "file"
+}
+
+func FormatPath(path string) string {
+	if strings.HasPrefix(path, "~/") || strings.HasPrefix(path, "~\\") {
+		homeDir, err := os.UserHomeDir()
+		if err == nil {
+			path = filepath.Join(homeDir, path[2:])
+		}
+	}
+	return path
+}
+
+func AbsPath(path string) string {
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return path
+	} else {
+		return absPath
+	}
+}
+
+func RelativePath(path, root string) string {
+	return strings.TrimPrefix(AbsPath(path), AbsPath(root))
 }

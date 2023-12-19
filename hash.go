@@ -38,6 +38,12 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	if len(paths) == 0 {
 		return results, fmt.Errorf("at least one file is required")
 	}
+
+	//Format path
+	for i, v := range paths {
+		paths[i] = util.FormatPath(v)
+	}
+
 	results = make([]vo.HashVo, 0)
 	fn := func(root, file string, size int64) error {
 		relative := strings.TrimPrefix(strings.TrimPrefix(file, root), string(os.PathSeparator))
@@ -53,12 +59,15 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 		results = append(results, ret)
 		return nil
 	}
+
 	for _, f := range paths {
 		root := ""
+
 		stat, err := os.Stat(f)
 		if err != nil {
 			return results, err
 		}
+
 		if stat.IsDir() {
 			root = filepath.Dir(f)
 			err = filepath.Walk(f, func(path string, info fs.FileInfo, err error) error {

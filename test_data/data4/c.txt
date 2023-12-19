@@ -1,11 +1,2 @@
 # sumdiff
 Compare tools for directory and files.
-
-# Usage
-```shell
-sumdiff sha1 file|directory
-sumdiff md5 file|directory
-sumdiff sha256 file|directory
-sumdiff diff file1 file2
-sumdiff diff dir1 dir2
-```

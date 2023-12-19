@@ -1,4 +1,4 @@
-# sumdife
+# sumdiff
 Compare tools for directory and files.
 
 # Usage
@@ -9,3 +9,4 @@ sumdiff sha256 file|directory
 sumdiff diff file1 file2
 sumdiff diff dir1 dir2
 ```
+==================================

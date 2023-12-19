@@ -15,23 +15,31 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	defer func() {
 		statusbar.Display("compare done!")
 	}()
+
+	path1 = util.FormatPath(path1)
+	path2 = util.FormatPath(path2)
+
 	result := vo.NewCmpVo(path1, path2)
 	result.Equal = false
 	var outError error
+
 	s1, err := os.Stat(path1)
 	if err != nil {
 		result.X.Error = err
 		outError = multierror.Append(outError, err)
 	}
+
 	s2, err := os.Stat(path2)
 	if err != nil {
 		result.Y.Error = err
 		outError = multierror.Append(outError, err)
 	}
+
 	if outError != nil {
 		result.Msg = outError.Error()
 		return false, []*vo.CmpVo{result}, outError
 	}
+
 	if s1.IsDir() != s2.IsDir() {
 		//result.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(s1.IsDir()), util.FileType(s2.IsDir()))
 		result.Msg = "not equal file type"
@@ -49,16 +57,19 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	var outError error
 	outResult := vo.NewCmpVo(path1, path2)
+
 	data1, err := listPathWithStatusbar(path1)
 	if err != nil {
 		outResult.X.Error = err
 		outError = multierror.Append(outError, err)
 	}
-	data2, err := listPathWithStatusbar(path1)
+
+	data2, err := listPathWithStatusbar(path2)
 	if err != nil {
 		outResult.Y.Error = err
 		outError = multierror.Append(outError, err)
 	}
+
 	if outError != nil {
 		outResult.Equal = false
 		outResult.Msg = outError.Error()
@@ -67,12 +78,14 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 
 	notEqualCount := 0
 	retList := make([]*vo.CmpVo, 0)
+
 	for k, v1 := range data1 {
 		statusbar.Display("compare path " + k)
 		itemResult := vo.NewCmpVo(k, k)
 		itemResult.X.Size = v1.Info.Size()
 		itemResult.Equal = false
 		v2, ok := data2[k]
+
 		if !ok {
 			itemResult.Y.Error = fmt.Errorf("not exist [%v]", k)
 			//itemResult.Msg = fmt.Sprintf("path2 not exist [%v]", k)
@@ -83,6 +96,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 		} else {
 			itemResult.Y.Size = v2.Info.Size()
 		}
+
 		if v1.Info.Size() != v2.Info.Size() {
 			//itemResult.Msg = fmt.Sprintf("size not equal [ %v != %v ]", v1.Info.Size(), v2.Info.Size())
 			itemResult.Msg = "not equal size"
@@ -90,6 +104,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			notEqualCount++
 			continue
 		}
+
 		if v1.Info.IsDir() != v2.Info.IsDir() {
 			//itemResult.Msg = fmt.Sprintf("file type not equal [ %v != %v ]", util.FileType(v1.Info.IsDir()), util.FileType(v2.Info.IsDir()))
 			itemResult.Msg = fmt.Sprintf("not equal file type")
@@ -97,9 +112,11 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			notEqualCount++
 			continue
 		}
+
 		//File check file md5
 		if !v1.Info.IsDir() {
 			var itemError error
+
 			h1, err := util.Sha256(v1.Path)
 			if err != nil {
 				itemResult.X.Error = err
@@ -108,6 +125,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			} else {
 				itemResult.X.Hash = h1
 			}
+
 			h2, err := util.Sha256(v2.Path)
 			if err != nil {
 				itemResult.Y.Error = err
@@ -116,12 +134,14 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			} else {
 				itemResult.Y.Hash = h2
 			}
+
 			if itemError != nil {
 				itemResult.Msg = outError.Error()
 				retList = append(retList, itemResult)
 				notEqualCount++
 				continue
 			}
+
 			if h1 != h2 {
 				//itemResult.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
 				itemResult.Msg = "not equal hash"
@@ -130,18 +150,19 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 				continue
 			}
 
-			//文件相同
+			//The same files
 		} else {
-			//目录相同
+			//The same directories
 		}
 
 		itemResult.Equal = true
 		itemResult.Msg = ""
 		retList = append(retList, itemResult)
 
-		//删除data2，后面判断是否有剩余的文件
+		//Delete the match files
 		delete(data2, k)
 	}
+
 	if len(data2) != 0 {
 		for k, v2 := range data2 {
 			itemResult := vo.NewCmpVo(k, k)
@@ -154,6 +175,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 			notEqualCount++
 		}
 	}
+
 	return notEqualCount == 0, retList, nil
 }
 
@@ -168,6 +190,7 @@ func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 	} else {
 		result.X.Size = f1.Size()
 	}
+
 	f2, err := os.Stat(file2)
 	if err != nil {
 		result.Y.Error = err
@@ -175,26 +198,31 @@ func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 	} else {
 		result.Y.Size = f2.Size()
 	}
+
 	h1, err := util.Sha256(file1)
 	if err != nil {
 		result.X.Error = err
 		outError = multierror.Append(outError, err)
 	}
+
 	h2, err := util.Sha256(file2)
 	if err != nil {
 		result.Y.Error = err
 		outError = multierror.Append(outError, err)
 	}
+
 	result.Equal = false
 	if outError != nil {
 		result.Msg = outError.Error()
 		return false, result, outError
 	}
+
 	if f1.Size() != f2.Size() {
 		//result.Msg = fmt.Sprintf("size not equal [ %v != %v ]", f1.Size(), f2.Size())
 		result.Msg = "not equal size"
 		return false, result, outError
 	}
+
 	if h1 != h2 {
 		//result.Msg = fmt.Sprintf("hash not equal [ %v != %v ]", h1, h2)
 		result.Msg = "not equal hash"
@@ -203,5 +231,6 @@ func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 
 	result.Equal = true
 	result.Msg = "equal"
+
 	return true, result, nil
 }
