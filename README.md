@@ -1,5 +1,25 @@
 # sumdiff
-Compare tools for directory and files.
+Compare sdk/tools for directory and files.
+
+# SDK
+
+## Install
+```bash
+go get -u github.com/foolin/sumdiff
+```
+
+## API
+```go
+
+//Compare 
+ok, result, err := Cmp(path1, path2)
+
+//Equal
+ok, err := Equal(v.path1, v.path2)
+
+```
+
+# CLI Tool
 
 ```
 sumdiff  --help

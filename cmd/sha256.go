@@ -23,11 +23,11 @@ package cmd
 
 import (
 	"crypto/sha256"
+	"github.com/foolin/sumdiff/vo"
 
 	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
-	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/spf13/cobra"
 )
 

@@ -18,12 +18,14 @@ type Statusbar struct {
 type Option struct {
 	Interval time.Duration
 	MaxWidth int
+	Disable  bool
 }
 
 func DefaultOption() *Option {
 	return &Option{
 		Interval: time.Millisecond * 200,
 		MaxWidth: 100,
+		Disable:  false,
 	}
 }
 
@@ -66,6 +68,9 @@ func (r *Statusbar) Stop() {
 }
 
 func (r *Statusbar) Clean() {
+	if r.option.Disable {
+		return
+	}
 	fmt.Printf("%v\r", runewidth.FillLeft(" ", r.option.MaxWidth))
 }
 
@@ -85,6 +90,9 @@ func (r *Statusbar) doStart() {
 }
 
 func (r *Statusbar) display(msg string) {
+	if r.option.Disable {
+		return
+	}
 	msg = fmt.Sprintf("%v %v", time.Now().Format("15:04:05"), msg)
 	msg = truncateMid(msg, r.option.MaxWidth, "...")
 	if len(msg) > 0 {

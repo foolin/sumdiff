@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Equal(path1, path2 string) (bool, error) {
+func Equal(path1, path2 string) (ok bool, err error) {
 	path1 = util.FormatPath(path1)
 	path2 = util.FormatPath(path2)
 
