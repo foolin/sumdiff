@@ -52,7 +52,7 @@ func EqualDir(path1, path2 string) (bool, error) {
 	}
 
 	for k, v1 := range data1 {
-		statusbar.Display("compare diff path " + k)
+		statusbar.Display("Comparing %v", k)
 		v2, ok := data2[k]
 		if !ok {
 			return false, fmt.Errorf("path2 not exist path %v", k)

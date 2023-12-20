@@ -80,7 +80,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	retList := make([]*vo.CmpVo, 0)
 
 	for k, v1 := range data1 {
-		statusbar.Display("compare path " + k)
+		statusbar.Display("Comparing %v", k)
 		itemResult := vo.NewCmpVo(k, k)
 		itemResult.X.Size = v1.Info.Size()
 		itemResult.Equal = false
