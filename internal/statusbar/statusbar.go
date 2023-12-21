@@ -62,8 +62,8 @@ func (r *Statusbar) DisplayEnd(format string, a ...any) {
 }
 
 func (r *Statusbar) Stop() {
-	r.ticker.Stop()
 	r.stop <- true
+	r.ticker.Stop()
 	r.Clean()
 }
 
