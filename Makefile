@@ -2,7 +2,7 @@ install:
 
 build:
 	mkdir -p ./bin
-	go build -o ./bin/sumdiff ./app/sumdiff.go
+	go build -o ./bin/sumdiff ./cli/sumdiff.go
 
 install: build
 	sudo rm -rf ~/go/bin/sumdiff

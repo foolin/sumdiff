@@ -20,13 +20,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 package sumdiff
-
-type Client struct {
-}
-
-func New(optFns ...func(opt *Option)) *Client {
-	for _, fn := range optFns {
-
-	}
-	return &Client{}
-}
