@@ -2,8 +2,9 @@ package sumdiff
 
 import (
 	"fmt"
-	"github.com/foolin/sumdiff/vo"
 	"os"
+
+	"github.com/foolin/sumdiff/vo"
 
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
@@ -11,10 +12,7 @@ import (
 )
 
 func Cmp(path1, path2 string) (ok bool, res []*vo.CmpVo, err error) {
-	statusbar.Display("compare start...")
-	defer func() {
-		statusbar.Display("compare done!")
-	}()
+	statusbar.Display("Comparing %v <-> %v", path1, path2)
 
 	path1 = util.FormatPath(path1)
 	path2 = util.FormatPath(path2)
@@ -80,7 +78,7 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	retList := make([]*vo.CmpVo, 0)
 
 	for k, v1 := range data1 {
-		statusbar.Display("compare path " + k)
+		statusbar.Display("Comparing " + k)
 		itemResult := vo.NewCmpVo(k, k)
 		itemResult.Hash1.Size = v1.Info.Size()
 		itemResult.Equal = false

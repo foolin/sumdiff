@@ -2,10 +2,10 @@ package plog
 
 import (
 	"fmt"
-	"github.com/mattn/go-runewidth"
 	"io"
 	"os"
-	"strings"
+
+	"github.com/mattn/go-runewidth"
 )
 
 const maxWidth = 100
@@ -69,18 +69,27 @@ func WriteTable(table [][]string) {
 	}
 	lineLength += 1 // +1 for the last "|" in the line
 
-	for i, line := range table {
-		if i == 0 { // table header
-			fmt.Printf("+%s+\n", strings.Repeat("-", lineLength-2)) // lineLength-2 because of "+" as first and last character
-		}
+	// for i, line := range table {
+	// 	if i == 0 { // table header
+	// 		fmt.Printf("+%s+\n", strings.Repeat("-", lineLength-2)) // lineLength-2 because of "+" as first and last character
+	// 	}
+	// 	for j, val := range line {
+	// 		fmt.Printf("| %-*s ", columnLengths[j], val)
+	// 		if j == len(line)-1 {
+	// 			fmt.Printf("|\n")
+	// 		}
+	// 	}
+	// 	if i == 0 || i == len(table)-1 { // table header or last line
+	// 		fmt.Printf("+%s+\n", strings.Repeat("-", lineLength-2)) // lineLength-2 because of "+" as first and last character
+	// 	}
+	// }
+
+	for _, line := range table {
 		for j, val := range line {
-			fmt.Printf("| %-*s ", columnLengths[j], val)
+			fmt.Printf(" %-*s ", columnLengths[j], val)
 			if j == len(line)-1 {
-				fmt.Printf("|\n")
+				fmt.Printf("\n")
 			}
-		}
-		if i == 0 || i == len(table)-1 { // table header or last line
-			fmt.Printf("+%s+\n", strings.Repeat("-", lineLength-2)) // lineLength-2 because of "+" as first and last character
 		}
 	}
 }

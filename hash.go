@@ -6,13 +6,15 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
-	"github.com/foolin/sumdiff/vo"
 	"hash"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/foolin/sumdiff/vo"
+
+	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
 )
 
@@ -47,6 +49,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	results = make([]vo.HashVo, 0)
 	fn := func(root, file string, size int64) error {
 		relative := util.RelativePath(file, root)
+		statusbar.Display("Calculating %v ...", relative)
 		hex, err := util.HashHex(h, file)
 		if err != nil {
 			return err
@@ -61,6 +64,8 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	}
 
 	for _, f := range paths {
+		statusbar.Display("Preparing %v ...", f)
+
 		root := ""
 
 		stat, err := os.Stat(f)

@@ -2,16 +2,25 @@ package statusbar
 
 import (
 	"fmt"
-	"github.com/mattn/go-runewidth"
 	"sync"
 	"time"
+
+	"github.com/mattn/go-runewidth"
+)
+
+type State int
+
+const (
+	StatusNone    State = 0
+	StatusRunning State = 1
+	StatusStop    State = -1
 )
 
 type Statusbar struct {
 	Message string
 	once    sync.Once
 	ticker  *time.Ticker
-	stop    chan bool
+	status  State //0-none, 1=running -1=stop
 	option  *Option
 }
 
@@ -39,7 +48,7 @@ func New(optFns ...func(option *Option)) *Statusbar {
 		Message: "",
 		once:    sync.Once{},
 		ticker:  time.NewTicker(opt.Interval),
-		stop:    make(chan bool),
+		status:  StatusNone,
 		option:  opt,
 	}
 }
@@ -62,7 +71,7 @@ func (r *Statusbar) DisplayEnd(format string, a ...any) {
 }
 
 func (r *Statusbar) Stop() {
-	r.stop <- true
+	r.status = StatusStop
 	r.ticker.Stop()
 	r.Clean()
 }
@@ -75,14 +84,16 @@ func (r *Statusbar) Clean() {
 }
 
 func (r *Statusbar) doStart() {
+	r.status = StatusRunning
 	go func() {
 		for {
+			if r.status == -1 {
+				break
+			}
 			select {
-			case <-r.stop:
-				return
 			case <-r.ticker.C:
 				r.display(r.Message)
-			case <-time.After(5 * time.Second):
+			case <-time.After(time.Millisecond):
 				r.display(r.Message)
 			}
 		}
