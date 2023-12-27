@@ -12,11 +12,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/foolin/sumdiff/vo"
+
+	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
-	"github.com/foolin/sumdiff/internal/vo"
 )
 
-func HashWithArgs(args ...string) (results []vo.HashVo, err error) {
+func HashWithArgs(args ...string) (res []vo.HashVo, err error) {
 	t := strings.ToLower(args[0])
 	var algo hash.Hash
 	switch t {
@@ -46,7 +48,8 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 
 	results = make([]vo.HashVo, 0)
 	fn := func(root, file string, size int64) error {
-		relative := strings.TrimPrefix(strings.TrimPrefix(file, root), string(os.PathSeparator))
+		relative := util.RelativePath(file, root)
+		statusbar.Display("Calculating %v ...", relative)
 		hex, err := util.HashHex(h, file)
 		if err != nil {
 			return err
@@ -61,6 +64,8 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 	}
 
 	for _, f := range paths {
+		statusbar.Display("Preparing %v ...", f)
+
 		root := ""
 
 		stat, err := os.Stat(f)

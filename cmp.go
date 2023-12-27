@@ -4,17 +4,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/foolin/sumdiff/vo"
+
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/internal/util"
-	"github.com/foolin/sumdiff/internal/vo"
 	"github.com/hashicorp/go-multierror"
 )
 
-func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
-	statusbar.Display("compare start...")
-	defer func() {
-		statusbar.Display("compare done!")
-	}()
+func Cmp(path1, path2 string) (ok bool, res []*vo.CmpVo, err error) {
+	statusbar.Display("Comparing %v <-> %v", path1, path2)
 
 	path1 = util.FormatPath(path1)
 	path2 = util.FormatPath(path2)
@@ -25,13 +23,13 @@ func Cmp(path1, path2 string) (bool, []*vo.CmpVo, error) {
 
 	s1, err := os.Stat(path1)
 	if err != nil {
-		result.X.Error = err
+		result.Hash1.Error = err
 		outError = multierror.Append(outError, err)
 	}
 
 	s2, err := os.Stat(path2)
 	if err != nil {
-		result.Y.Error = err
+		result.Hash2.Error = err
 		outError = multierror.Append(outError, err)
 	}
 
@@ -60,13 +58,13 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 
 	data1, err := listPathWithStatusbar(path1)
 	if err != nil {
-		outResult.X.Error = err
+		outResult.Hash1.Error = err
 		outError = multierror.Append(outError, err)
 	}
 
 	data2, err := listPathWithStatusbar(path2)
 	if err != nil {
-		outResult.Y.Error = err
+		outResult.Hash2.Error = err
 		outError = multierror.Append(outError, err)
 	}
 
@@ -80,21 +78,21 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	retList := make([]*vo.CmpVo, 0)
 
 	for k, v1 := range data1 {
-		statusbar.Display("Comparing %v", k)
+		statusbar.Display("Comparing " + k)
 		itemResult := vo.NewCmpVo(k, k)
-		itemResult.X.Size = v1.Info.Size()
+		itemResult.Hash1.Size = v1.Info.Size()
 		itemResult.Equal = false
 		v2, ok := data2[k]
 
 		if !ok {
-			itemResult.Y.Error = fmt.Errorf("not exist [%v]", k)
+			itemResult.Hash2.Error = fmt.Errorf("not exist [%v]", k)
 			//itemResult.Msg = fmt.Sprintf("path2 not exist [%v]", k)
 			itemResult.Msg = "path2 not exist"
 			retList = append(retList, itemResult)
 			notEqualCount++
 			continue
 		} else {
-			itemResult.Y.Size = v2.Info.Size()
+			itemResult.Hash2.Size = v2.Info.Size()
 		}
 
 		if v1.Info.Size() != v2.Info.Size() {
@@ -119,20 +117,20 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 
 			h1, err := util.Sha256(v1.Path)
 			if err != nil {
-				itemResult.X.Error = err
+				itemResult.Hash1.Error = err
 				itemError = multierror.Append(outError, err)
 				outError = multierror.Append(outError, err)
 			} else {
-				itemResult.X.Hash = h1
+				itemResult.Hash1.Hash = h1
 			}
 
 			h2, err := util.Sha256(v2.Path)
 			if err != nil {
-				itemResult.Y.Error = err
+				itemResult.Hash2.Error = err
 				itemError = multierror.Append(outError, err)
 				outError = multierror.Append(outError, err)
 			} else {
-				itemResult.Y.Hash = h2
+				itemResult.Hash2.Hash = h2
 			}
 
 			if itemError != nil {
@@ -166,9 +164,9 @@ func CmpDir(path1, path2 string) (bool, []*vo.CmpVo, error) {
 	if len(data2) != 0 {
 		for k, v2 := range data2 {
 			itemResult := vo.NewCmpVo(k, k)
-			itemResult.Y.Size = v2.Info.Size()
+			itemResult.Hash2.Size = v2.Info.Size()
 			itemResult.Equal = false
-			itemResult.X.Error = fmt.Errorf("not exist [%v]", k)
+			itemResult.Hash1.Error = fmt.Errorf("not exist [%v]", k)
 			//itemResult.Msg = fmt.Sprintf("path1 not exist [%v]", k)
 			itemResult.Msg = "not exist path1"
 			retList = append(retList, itemResult)
@@ -185,30 +183,34 @@ func CmpFile(file1, file2 string) (bool, *vo.CmpVo, error) {
 
 	f1, err := os.Stat(file1)
 	if err != nil {
-		result.X.Error = err
+		result.Hash1.Error = err
 		outError = multierror.Append(outError, err)
 	} else {
-		result.X.Size = f1.Size()
+		result.Hash1.Size = f1.Size()
 	}
 
 	f2, err := os.Stat(file2)
 	if err != nil {
-		result.Y.Error = err
+		result.Hash2.Error = err
 		outError = multierror.Append(outError, err)
 	} else {
-		result.Y.Size = f2.Size()
+		result.Hash2.Size = f2.Size()
 	}
 
 	h1, err := util.Sha256(file1)
 	if err != nil {
-		result.X.Error = err
+		result.Hash1.Error = err
 		outError = multierror.Append(outError, err)
+	} else {
+		result.Hash1.Hash = h1
 	}
 
 	h2, err := util.Sha256(file2)
 	if err != nil {
-		result.Y.Error = err
+		result.Hash2.Error = err
 		outError = multierror.Append(outError, err)
+	} else {
+		result.Hash2.Hash = h2
 	}
 
 	result.Equal = false

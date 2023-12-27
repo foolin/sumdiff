@@ -2,13 +2,14 @@ package sumdiff
 
 import (
 	"fmt"
-	"github.com/foolin/sumdiff/internal/statusbar"
-	"github.com/foolin/sumdiff/internal/util"
 	"os"
 	"strings"
+
+	"github.com/foolin/sumdiff/internal/statusbar"
+	"github.com/foolin/sumdiff/internal/util"
 )
 
-func Equal(path1, path2 string) (bool, error) {
+func Equal(path1, path2 string) (ok bool, err error) {
 	path1 = util.FormatPath(path1)
 	path2 = util.FormatPath(path2)
 
@@ -52,7 +53,7 @@ func EqualDir(path1, path2 string) (bool, error) {
 	}
 
 	for k, v1 := range data1 {
-		statusbar.Display("Comparing %v", k)
+		statusbar.Display("Comparing %v ...", k)
 		v2, ok := data2[k]
 		if !ok {
 			return false, fmt.Errorf("path2 not exist path %v", k)

@@ -16,12 +16,17 @@ before:
     - go generate ./...
 
 builds:
-  - env:
-      - CGO_ENABLED=0
+  - binary: sumdiff
+    main: ./cli/sumdiff.go
     goos:
       - linux
-      - windows
       - darwin
+      - windows
+    goarch:
+      - amd64
+      - 386
+      - arm64
+
 
 archives:
   - format: tar.gz
