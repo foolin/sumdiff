@@ -7,10 +7,63 @@ import (
 	"github.com/liushuochen/gotable"
 	"gopkg.in/yaml.v3"
 	"io"
+	"os"
+)
+
+type Type int
+
+const (
+	Default Type = iota
+	Table
+	Csv
+	Json
+	Yaml
 )
 
 type Writer struct {
 	w io.Writer
+	t Type
+}
+
+type TableData interface {
+	Array() [][]string
+}
+
+func New(w io.Writer, t Type) *Writer {
+	return &Writer{
+		w: w,
+		t: t,
+	}
+}
+
+func NewStd() *Writer {
+	return New(os.Stdout, Default)
+}
+
+func (r *Writer) Write(data TableData) error {
+	switch r.t {
+	case Table:
+		return r.Table(data.Array())
+	case Csv:
+		return r.Csv(data.Array())
+	case Json:
+		return r.Json(data)
+	case Yaml:
+		return r.Yaml(data)
+		//case Default:
+		//	fallthrough
+		//default:
+		//	return r.Table(data.Array())
+	}
+	return r.Table(data.Array())
+}
+
+func (r *Writer) MustWrite(data TableData) {
+	err := r.Write(data)
+	if err != nil {
+		fmt.Printf("Write error: %v", err)
+		os.Exit(1)
+	}
 }
 
 func (r *Writer) Printf(s string, a ...any) (n int, err error) {

@@ -6,13 +6,15 @@ type HashVo struct {
 	Path  string `json:"path"`
 	Size  int64  `json:"size"`
 	Hash  string `json:"hash"`
-	Error error  `json:"error"`
+	Error error  `json:"error,omitempty" yaml:"error,omitempty"`
 }
 
-func HashToTable(list []HashVo) [][]string {
-	out := make([][]string, len(list)+1)
+type HashList []HashVo
+
+func (r HashList) Array() [][]string {
+	out := make([][]string, len(r)+1)
 	out[0] = []string{"Hash", "Size", "Path"}
-	for i, v := range list {
+	for i, v := range r {
 		out[i+1] = []string{v.Hash, fmt.Sprintf("%v", v.Size), v.Path}
 	}
 	return out

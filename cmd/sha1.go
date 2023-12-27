@@ -23,10 +23,10 @@ package cmd
 
 import (
 	"crypto/sha1"
+	"github.com/foolin/sumdiff/internal/write"
 	"github.com/foolin/sumdiff/vo"
 
 	"github.com/foolin/sumdiff"
-	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/spf13/cobra"
 )
@@ -39,17 +39,14 @@ var sha1Cmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		statusbar.Start()
-		results, err := sumdiff.Hash(sha1.New(), args...)
+		list, err := sumdiff.Hash(sha1.New(), args...)
 		statusbar.Stop()
+		w := write.NewStd()
 		if err != nil {
-			plog.Println(err)
+			w.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		if len(results) == 1 {
-			plog.Writeln(results[0].Hash)
-		} else {
-			plog.WriteTable(vo.HashToTable(results))
-		}
+		w.MustWrite(list)
 	},
 }
 

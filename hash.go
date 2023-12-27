@@ -18,7 +18,7 @@ import (
 	"github.com/foolin/sumdiff/internal/util"
 )
 
-func HashWithArgs(args ...string) (res []vo.HashVo, err error) {
+func HashWithArgs(args ...string) (res vo.HashList, err error) {
 	t := strings.ToLower(args[0])
 	var algo hash.Hash
 	switch t {
@@ -36,7 +36,7 @@ func HashWithArgs(args ...string) (res []vo.HashVo, err error) {
 	return Hash(algo, args[1:]...)
 }
 
-func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
+func Hash(h hash.Hash, paths ...string) (results vo.HashList, err error) {
 	if len(paths) == 0 {
 		return results, fmt.Errorf("at least one file is required")
 	}
@@ -46,7 +46,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 		paths[i] = util.FormatPath(v)
 	}
 
-	results = make([]vo.HashVo, 0)
+	results = make(vo.HashList, 0)
 	fn := func(root, file string, size int64) error {
 		relative := util.RelativePath(file, root)
 		statusbar.Display("Calculating %v ...", relative)
