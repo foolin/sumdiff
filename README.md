@@ -179,3 +179,4 @@ tar -xvf sumdiff_Linux_x86_64.tar.gz && sudo mv sumdiff /usr/local/bin
 ## TODO
 [ ] Output table,csv,yaml,json
 [ ] Config display statusbar
+[ ] Write file
