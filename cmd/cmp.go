@@ -23,12 +23,14 @@ package cmd
 
 import (
 	"github.com/foolin/sumdiff"
-	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
+	"github.com/foolin/sumdiff/internal/write"
 	"github.com/foolin/sumdiff/vo"
 
 	"github.com/spf13/cobra"
 )
+
+var detail bool
 
 // cmpCmd represents the cmp command
 var cmpCmd = &cobra.Command{
@@ -39,11 +41,16 @@ var cmpCmd = &cobra.Command{
 		statusbar.Start()
 		ok, list, err := sumdiff.Cmp(args[0], args[1])
 		statusbar.Stop()
+		w := write.NewStd()
 		if err != nil {
-			plog.Println("Happen error:", err)
+			w.MustWrite(vo.NewErrInfo(err))
+			return
 		}
-		plog.WriteTable(vo.CmpToLiteTable(list))
-		plog.Println("result:", ok)
+		if detail {
+			w.MustWrite(list)
+		} else {
+			w.MustWrite(vo.NewAny("result", ok))
+		}
 	},
 }
 
@@ -54,7 +61,7 @@ func init() {
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// cmpCmd.PersistentFlags().String("foo", "", "A help for foo")
+	cmpCmd.PersistentFlags().BoolVarP(&detail, "detail", "", false, "Show detail result")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

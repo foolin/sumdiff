@@ -10,16 +10,6 @@ import (
 	"os"
 )
 
-type Type int
-
-const (
-	Default Type = iota
-	Table
-	Csv
-	Json
-	Yaml
-)
-
 type Writer struct {
 	w io.Writer
 	t Type
@@ -37,7 +27,7 @@ func New(w io.Writer, t Type) *Writer {
 }
 
 func NewStd() *Writer {
-	return New(os.Stdout, Default)
+	return New(os.Stdout, None)
 }
 
 func (r *Writer) Write(data TableData) error {
@@ -50,7 +40,7 @@ func (r *Writer) Write(data TableData) error {
 		return r.Json(data)
 	case Yaml:
 		return r.Yaml(data)
-		//case Default:
+		//case None:
 		//	fallthrough
 		//default:
 		//	return r.Table(data.Array())

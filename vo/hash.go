@@ -2,14 +2,14 @@ package vo
 
 import "fmt"
 
-type HashVo struct {
+type HashInfo struct {
 	Path  string `json:"path"`
 	Size  int64  `json:"size"`
 	Hash  string `json:"hash"`
 	Error error  `json:"error,omitempty" yaml:"error,omitempty"`
 }
 
-type HashList []HashVo
+type HashList []HashInfo
 
 func (r HashList) Array() [][]string {
 	out := make([][]string, len(r)+1)
