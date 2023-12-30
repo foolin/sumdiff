@@ -2,12 +2,12 @@
 Compare sdk/tools for directory and files.
 
 ## Features
-[x] Support comparing files or directories result is equals. 
-[x] Supports comparing files or directories with the difference list. 
-[x] Support for calculating the hash of a file or directories md5/sha1/sha256/sha512. 
-[x] This library supports both SDK and CLI tools.
-[x] CLI support result format : table/json/csv/yaml 
-[x] CLI support result output to a file.
+- [x] Support comparing files or directories result is equals. 
+- [x] Supports comparing files or directories with the difference list. 
+- [x] Support for calculating the hash of a file or directories md5/sha1/sha256/sha512. 
+- [x] This library supports both SDK and CLI tools.
+- [x] CLI support result format : table/json/csv/yaml 
+- [x] CLI support result output to a file.
 
 # SDK
 
