@@ -22,13 +22,18 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"github.com/foolin/sumdiff/internal/plog"
 	"os"
+	"path/filepath"
 
+	"github.com/foolin/sumdiff/internal/util"
+	"github.com/foolin/sumdiff/internal/vlog"
+	"github.com/foolin/sumdiff/internal/write"
 	"github.com/spf13/cobra"
 )
 
-var verbose bool
+var config *Config
+var writer *write.Writer
+var file *os.File
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -39,8 +44,43 @@ var rootCmd = &cobra.Command{
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("verbose:", verbose)
-		plog.SetVerbose(verbose)
+		//Verbose
+		vlog.SetVerbose(config.Verbose)
+
+		//Write
+		format := write.Table
+		if config.Format != "" {
+			var ok bool
+			format, ok = write.FormatOfName(config.Format)
+			if !ok {
+				vlog.Exit(1, "Format invalid: %v\n", config.Format)
+				return
+			}
+		}
+
+		w := os.Stdout
+		if config.Output != "" {
+			path := util.FormatPath(config.Output)
+			_ = os.MkdirAll(filepath.Dir(path), 0755)
+			var err error
+			file, err = os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
+			if err != nil {
+				vlog.Exit(1, "Open file %v error: %\n", path, err)
+				return
+			}
+			w = file
+		}
+
+		//Create writer
+		writer = write.New(w, format)
+	},
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		if file != nil {
+			err := file.Close()
+			if err != nil {
+				vlog.Printf("Close file error: %v\n", err)
+			}
+		}
 	},
 }
 
@@ -59,8 +99,15 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
+	config = &Config{
+		Verbose: false,
+		Format:  "table",
+		Output:  "",
+	}
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sumdiff.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output info")
+	rootCmd.PersistentFlags().BoolVarP(&config.Verbose, "verbose", "v", false, "Verbose output info")
+	rootCmd.PersistentFlags().StringVarP(&config.Format, "format", "f", "table", "Format: table|json|csv|yaml")
+	rootCmd.PersistentFlags().StringVarP(&config.Output, "output", "o", "", "Output filename")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

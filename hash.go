@@ -18,7 +18,7 @@ import (
 	"github.com/foolin/sumdiff/internal/util"
 )
 
-func HashWithArgs(args ...string) (res []vo.HashVo, err error) {
+func HashWithArgs(args ...string) (list vo.HashList, err error) {
 	t := strings.ToLower(args[0])
 	var algo hash.Hash
 	switch t {
@@ -36,9 +36,9 @@ func HashWithArgs(args ...string) (res []vo.HashVo, err error) {
 	return Hash(algo, args[1:]...)
 }
 
-func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
+func Hash(h hash.Hash, paths ...string) (list vo.HashList, err error) {
 	if len(paths) == 0 {
-		return results, fmt.Errorf("at least one file is required")
+		return list, fmt.Errorf("at least one file is required")
 	}
 
 	//Format path
@@ -46,7 +46,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 		paths[i] = util.FormatPath(v)
 	}
 
-	results = make([]vo.HashVo, 0)
+	list = make(vo.HashList, 0)
 	fn := func(root, file string, size int64) error {
 		relative := util.RelativePath(file, root)
 		statusbar.Display("Calculating %v ...", relative)
@@ -54,12 +54,12 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 		if err != nil {
 			return err
 		}
-		ret := vo.HashVo{
+		ret := vo.HashInfo{
 			Path: relative,
 			Size: size,
 			Hash: hex,
 		}
-		results = append(results, ret)
+		list = append(list, ret)
 		return nil
 	}
 
@@ -70,7 +70,7 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 
 		stat, err := os.Stat(f)
 		if err != nil {
-			return results, err
+			return list, err
 		}
 
 		if stat.IsDir() {
@@ -85,14 +85,14 @@ func Hash(h hash.Hash, paths ...string) (results []vo.HashVo, err error) {
 				return fn(root, path, stat.Size())
 			})
 			if err != nil {
-				return results, err
+				return list, err
 			}
 		} else {
 			err = fn(root, f, stat.Size())
 			if err != nil {
-				return results, err
+				return list, err
 			}
 		}
 	}
-	return results, nil
+	return list, nil
 }

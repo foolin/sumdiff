@@ -23,7 +23,6 @@ package cmd
 
 import (
 	"github.com/foolin/sumdiff"
-	"github.com/foolin/sumdiff/internal/plog"
 	"github.com/foolin/sumdiff/internal/statusbar"
 	"github.com/foolin/sumdiff/vo"
 	"github.com/spf13/cobra"
@@ -37,17 +36,13 @@ var hashCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		statusbar.Start()
-		results, err := sumdiff.HashWithArgs(args...)
+		list, err := sumdiff.HashWithArgs(args...)
 		statusbar.Stop()
 		if err != nil {
-			plog.Println(err)
+			writer.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		if len(results) == 1 {
-			plog.Writeln(results[0].Hash)
-		} else {
-			plog.WriteTable(vo.HashToTable(results))
-		}
+		writer.MustWrite(list)
 	},
 }
 
