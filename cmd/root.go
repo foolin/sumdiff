@@ -63,7 +63,7 @@ var rootCmd = &cobra.Command{
 			path := util.FormatPath(config.Output)
 			_ = os.MkdirAll(filepath.Dir(path), 0755)
 			var err error
-			file, err = os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+			file, err = os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 			if err != nil {
 				vlog.Exit(1, "Open file %v error: %\n", path, err)
 				return
