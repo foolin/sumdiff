@@ -22,15 +22,17 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/foolin/sumdiff/internal/util"
 	"github.com/foolin/sumdiff/internal/vlog"
 	"github.com/foolin/sumdiff/internal/write"
 	"github.com/spf13/cobra"
-	"os"
-	"path/filepath"
 )
 
-var config Config
+var config *Config
 var writer *write.Writer
 var file *os.File
 
@@ -43,18 +45,21 @@ var rootCmd = &cobra.Command{
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+
+		fmt.Printf("Config: %#v", config)
 		//Verbose
 		vlog.SetVerbose(config.Verbose)
 
 		//Write
 		t := write.Table
-		if config.Format != "" {
+		if config.Type != "" {
 			var ok bool
-			t, ok = write.TypeOfName(config.Format)
+			t, ok = write.TypeOfName(config.Type)
 			if !ok {
-				vlog.Exit(1, "Format invalid: %v\n", config.Format)
+				vlog.Exit(1, "Format invalid: %v\n", config.Type)
 				return
 			}
+			fmt.Printf("Parse type: %v\n", t)
 		}
 
 		w := os.Stdout
@@ -98,14 +103,14 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	config = Config{
+	config = &Config{
 		Verbose: false,
-		Format:  "",
+		Type:    "table",
 		Output:  "",
 	}
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sumdiff.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&config.Verbose, "verbose", "v", false, "Verbose output info")
-	rootCmd.PersistentFlags().StringVarP(&config.Format, "format", "f", "table", "Format: table|json|csv|yaml")
+	rootCmd.PersistentFlags().StringVarP(&config.Type, "type", "t", "table", "Format: table|json|csv|yaml")
 	rootCmd.PersistentFlags().StringVarP(&config.Output, "output", "o", "", "Output filename")
 
 	// Cobra also supports local flags, which will only run

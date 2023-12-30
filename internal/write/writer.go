@@ -4,15 +4,16 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"github.com/liushuochen/gotable"
-	"gopkg.in/yaml.v3"
 	"io"
 	"os"
+
+	"github.com/liushuochen/gotable"
+	"gopkg.in/yaml.v3"
 )
 
 type Writer struct {
-	w io.Writer
-	t Type
+	writer io.Writer
+	typ    Type
 }
 
 type TableData interface {
@@ -21,8 +22,8 @@ type TableData interface {
 
 func New(w io.Writer, t Type) *Writer {
 	return &Writer{
-		w: w,
-		t: t,
+		writer: w,
+		typ:    t,
 	}
 }
 
@@ -31,7 +32,8 @@ func NewStd() *Writer {
 }
 
 func (r *Writer) Write(data TableData) error {
-	switch r.t {
+	fmt.Printf("type: %v\n", r.typ)
+	switch r.typ {
 	case Table:
 		return r.Table(data.Array())
 	case Csv:
@@ -57,7 +59,7 @@ func (r *Writer) MustWrite(data TableData) {
 }
 
 func (r *Writer) Printf(s string, a ...any) (n int, err error) {
-	return r.w.Write([]byte(fmt.Sprintf(s, a...)))
+	return r.writer.Write([]byte(fmt.Sprintf(s, a...)))
 }
 
 func (r *Writer) Table(records [][]string) error {
@@ -85,7 +87,7 @@ func (r *Writer) Table(records [][]string) error {
 }
 
 func (r *Writer) Csv(records [][]string) error {
-	writer := csv.NewWriter(r.w)
+	writer := csv.NewWriter(r.writer)
 	return writer.WriteAll(records)
 }
 
