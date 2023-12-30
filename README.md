@@ -1,6 +1,14 @@
 # sumdiff
 Compare sdk/tools for directory and files.
 
+## Features
+[x] Support comparing files or directories result is equals. 
+[x] Supports comparing files or directories with the difference list. 
+[x] Support for calculating the hash of a file or directories md5/sha1/sha256/sha512. 
+[x] This library supports both SDK and CLI tools.
+[x] CLI support result format : table/json/csv/yaml 
+[x] CLI support result output to a file.
+
 # SDK
 
 ## Install
@@ -12,10 +20,10 @@ go get -u github.com/foolin/sumdiff
 ```go
 
 //Compare 
-ok, result, err := Cmp(path1, path2)
+ok, result, err := sumdiff.Cmp(path1, path2)
 
 //Equal
-ok, err := Equal(v.path1, v.path2)
+ok, err := sumdiff.Equal(v.path1, v.path2)
 
 ```
 
@@ -23,26 +31,30 @@ ok, err := Equal(v.path1, v.path2)
 
 ```
 sumdiff  --help
+
 A useful comparison tool for differences and hash
 
 Usage:
   sumdiff [command]
 
 Available Commands:
-  eq          Compare whether two files or directory are equal
   cmp         Compare the two files or directories are different
+  completion  Generate the autocompletion script for the specified shell
+  eq          Compare whether two files or directory are equal
   hash        Calculate hash algorithm [md5|sha1|sha256|sha512] hex string
   help        Help about any command
   md5         Calculate md5 hex string
   sha1        Calculate sha1 hex string
   sha256      Calculate sha256 hex string
-  completion  Generate the autocompletion script for the specified shell
-  
+
 Flags:
-  -h, --help      help for sumdiff
-  -v, --verbose   Verbose output info
+  -f, --format string   Format: table|json|csv|yaml (default "table")
+  -h, --help            help for sumdiff
+  -o, --output string   Output filename
+  -v, --verbose         Verbose output info
 
 Use "sumdiff [command] --help" for more information about a command.
+
 
 ```
 
@@ -175,8 +187,3 @@ linux:
 tar -xvf sumdiff_Linux_x86_64.tar.gz && sudo mv sumdiff /usr/local/bin
 
 ```
-
-## TODO
-- [ ] Output table,csv,yaml,json  
-- [ ] Config display statusbar  
-- [ ] Write file or console
