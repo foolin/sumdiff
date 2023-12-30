@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -45,21 +44,18 @@ var rootCmd = &cobra.Command{
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-
-		fmt.Printf("Config: %#v", config)
 		//Verbose
 		vlog.SetVerbose(config.Verbose)
 
 		//Write
-		t := write.Table
-		if config.Type != "" {
+		format := write.Table
+		if config.Format != "" {
 			var ok bool
-			t, ok = write.TypeOfName(config.Type)
+			format, ok = write.FormatOfName(config.Format)
 			if !ok {
-				vlog.Exit(1, "Format invalid: %v\n", config.Type)
+				vlog.Exit(1, "Format invalid: %v\n", config.Format)
 				return
 			}
-			fmt.Printf("Parse type: %v\n", t)
 		}
 
 		w := os.Stdout
@@ -76,7 +72,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		//Create writer
-		writer = write.New(w, t)
+		writer = write.New(w, format)
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
 		if file != nil {
@@ -105,12 +101,12 @@ func init() {
 
 	config = &Config{
 		Verbose: false,
-		Type:    "table",
+		Format:  "table",
 		Output:  "",
 	}
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sumdiff.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&config.Verbose, "verbose", "v", false, "Verbose output info")
-	rootCmd.PersistentFlags().StringVarP(&config.Type, "type", "t", "table", "Format: table|json|csv|yaml")
+	rootCmd.PersistentFlags().StringVarP(&config.Format, "format", "f", "table", "Format: table|json|csv|yaml")
 	rootCmd.PersistentFlags().StringVarP(&config.Output, "output", "o", "", "Output filename")
 
 	// Cobra also supports local flags, which will only run

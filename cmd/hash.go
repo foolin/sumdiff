@@ -24,7 +24,6 @@ package cmd
 import (
 	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/statusbar"
-	"github.com/foolin/sumdiff/internal/write"
 	"github.com/foolin/sumdiff/vo"
 	"github.com/spf13/cobra"
 )
@@ -39,12 +38,11 @@ var hashCmd = &cobra.Command{
 		statusbar.Start()
 		list, err := sumdiff.HashWithArgs(args...)
 		statusbar.Stop()
-		w := write.NewStd()
 		if err != nil {
-			w.MustWrite(vo.NewErrInfo(err))
+			writer.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		w.MustWrite(list)
+		writer.MustWrite(list)
 	},
 }
 

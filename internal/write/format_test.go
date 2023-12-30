@@ -6,6 +6,6 @@ import (
 )
 
 func TestTypeOfName(t *testing.T) {
-	typ, ok := TypeOfName("json")
+	typ, ok := FormatOfName("json")
 	fmt.Printf("%v %v", typ, ok)
 }

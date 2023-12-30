@@ -24,7 +24,6 @@ package cmd
 import (
 	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/statusbar"
-	"github.com/foolin/sumdiff/internal/write"
 	"github.com/foolin/sumdiff/vo"
 	"github.com/spf13/cobra"
 )
@@ -39,12 +38,11 @@ var eqCmd = &cobra.Command{
 		statusbar.Start()
 		ret, err := sumdiff.Equal(args[0], args[1])
 		statusbar.Stop()
-		w := write.NewStd()
 		if err != nil {
-			w.MustWrite(vo.NewErrInfo(err))
+			writer.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		w.MustWrite(vo.NewAny("result", ret))
+		writer.MustWrite(vo.NewAny("result", ret))
 	},
 }
 

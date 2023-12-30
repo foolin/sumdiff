@@ -23,7 +23,6 @@ package cmd
 
 import (
 	"crypto/sha1"
-	"github.com/foolin/sumdiff/internal/write"
 	"github.com/foolin/sumdiff/vo"
 
 	"github.com/foolin/sumdiff"
@@ -41,12 +40,11 @@ var sha1Cmd = &cobra.Command{
 		statusbar.Start()
 		list, err := sumdiff.Hash(sha1.New(), args...)
 		statusbar.Stop()
-		w := write.NewStd()
 		if err != nil {
-			w.MustWrite(vo.NewErrInfo(err))
+			writer.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		w.MustWrite(list)
+		writer.MustWrite(list)
 	},
 }
 

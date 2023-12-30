@@ -13,17 +13,17 @@ import (
 
 type Writer struct {
 	writer io.Writer
-	typ    Type
+	format Format
 }
 
 type TableData interface {
 	Array() [][]string
 }
 
-func New(w io.Writer, t Type) *Writer {
+func New(w io.Writer, f Format) *Writer {
 	return &Writer{
 		writer: w,
-		typ:    t,
+		format: f,
 	}
 }
 
@@ -32,8 +32,7 @@ func NewStd() *Writer {
 }
 
 func (r *Writer) Write(data TableData) error {
-	fmt.Printf("type: %v\n", r.typ)
-	switch r.typ {
+	switch r.format {
 	case Table:
 		return r.Table(data.Array())
 	case Csv:
@@ -42,12 +41,11 @@ func (r *Writer) Write(data TableData) error {
 		return r.Json(data)
 	case Yaml:
 		return r.Yaml(data)
-		//case None:
-		//	fallthrough
-		//default:
-		//	return r.Table(data.Array())
+	case None:
+		fallthrough
+	default:
+		return r.Table(data.Array())
 	}
-	return r.Table(data.Array())
 }
 
 func (r *Writer) MustWrite(data TableData) {
@@ -79,7 +77,7 @@ func (r *Writer) Table(records [][]string) error {
 			return err
 		}
 	}
-	_, err = r.Printf("%v", table)
+	_, err = r.Printf("%v\n", table)
 	if err != nil {
 		return err
 	}
@@ -96,7 +94,7 @@ func (r *Writer) Json(v any) error {
 	if err != nil {
 		return err
 	}
-	_, err = r.Printf("%s", data)
+	_, err = r.Printf("%s\n", data)
 	if err != nil {
 		return err
 	}
@@ -108,7 +106,7 @@ func (r *Writer) Yaml(v any) error {
 	if err != nil {
 		return err
 	}
-	_, err = r.Printf("%s", data)
+	_, err = r.Printf("%s\n", data)
 	if err != nil {
 		return err
 	}
