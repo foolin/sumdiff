@@ -29,26 +29,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var detail bool
-
 // cmpCmd represents the cmp command
 var cmpCmd = &cobra.Command{
 	Use:   "cmp",
-	Short: "Compare the two files or directories are different",
-	Long:  `Compare the two files or directories are different`,
+	Short: "Compare two files or directories for a list of differences",
+	Long:  `Compare two files or directories for a list of differences`,
 	Run: func(cmd *cobra.Command, args []string) {
 		statusbar.Start()
-		ok, list, err := sumdiff.Cmp(args[0], args[1])
+		_, list, err := sumdiff.Cmp(args[0], args[1])
 		statusbar.Stop()
 		if err != nil {
 			writer.MustWrite(vo.NewErrInfo(err))
 			return
 		}
-		if detail {
-			writer.MustWrite(list)
-		} else {
-			writer.MustWrite(vo.NewAny("result", ok))
-		}
+		writer.MustWrite(list)
 	},
 }
 
@@ -59,7 +53,7 @@ func init() {
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	cmpCmd.PersistentFlags().BoolVarP(&detail, "detail", "", false, "Show detail result")
+	//cmpCmd.PersistentFlags().BoolVarP(&detail, "detail", "", false, "Show detail result")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
