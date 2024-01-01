@@ -12,8 +12,8 @@ func NewErrInfo(err error) *ErrInfo {
 
 func (r *ErrInfo) Array() [][]string {
 	records := [][]string{
-		{"Field", "Value"},
-		{"Error", r.Error},
+		{"ERROR"},
+		{r.Error},
 	}
 	return records
 }

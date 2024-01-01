@@ -14,3 +14,7 @@ func (r Any) Array() [][]string {
 func NewAny(name string, value any) Any {
 	return Any{name, value}
 }
+
+func NewResult(value any) Any {
+	return NewAny("RESULT", value)
+}

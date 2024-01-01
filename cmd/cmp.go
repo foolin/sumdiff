@@ -24,8 +24,7 @@ package cmd
 import (
 	"github.com/foolin/sumdiff"
 	"github.com/foolin/sumdiff/internal/statusbar"
-	"github.com/foolin/sumdiff/vo"
-
+	"github.com/foolin/sumdiff/internal/vlog"
 	"github.com/spf13/cobra"
 )
 
@@ -36,12 +35,12 @@ var cmpCmd = &cobra.Command{
 	Long:  `Compare two files or directories for a list of differences`,
 	Run: func(cmd *cobra.Command, args []string) {
 		statusbar.Start()
-		_, list, err := sumdiff.Cmp(args[0], args[1])
+		ok, list, err := sumdiff.Cmp(args[0], args[1])
 		statusbar.Stop()
 		if err != nil {
-			writer.MustWrite(vo.NewErrInfo(err))
-			return
+			vlog.Printf("Error: %v", err)
 		}
+		vlog.Printf("Result: %v", ok)
 		writer.MustWrite(list)
 	},
 }

@@ -78,5 +78,11 @@ func AbsPath(path string) string {
 }
 
 func RelativePath(path, root string) string {
-	return strings.TrimPrefix(AbsPath(path), AbsPath(root))
+	absPath := AbsPath(path)
+	absRoot := AbsPath(root)
+	relative := strings.TrimPrefix(absPath, absRoot)
+	if len(absPath) > len(relative) {
+		return strings.TrimPrefix(relative, string(filepath.Separator))
+	}
+	return relative
 }
