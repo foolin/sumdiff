@@ -77,7 +77,7 @@ func (r *Writer) Table(records [][]string) error {
 			return err
 		}
 	}
-	_, err = r.Printf("%v\n", table)
+	_, err = r.Printf("%v", table)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func (r *Writer) Yaml(v any) error {
 	if err != nil {
 		return err
 	}
-	_, err = r.Printf("%s\n", data)
+	_, err = r.Printf("%s", data)
 	if err != nil {
 		return err
 	}

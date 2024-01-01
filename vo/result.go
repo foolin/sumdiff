@@ -2,19 +2,14 @@ package vo
 
 import "fmt"
 
-type Any struct {
-	Name  string
-	Value any
+type Result struct {
+	Result any `json:"result" yaml:"result"`
 }
 
-func (r Any) Array() [][]string {
-	return [][]string{{r.Name}, {fmt.Sprintf("%v", r.Value)}}
+func (r Result) Array() [][]string {
+	return [][]string{{"RESULT"}, {fmt.Sprintf("%v", r.Result)}}
 }
 
-func NewAny(name string, value any) Any {
-	return Any{name, value}
-}
-
-func NewResult(value any) Any {
-	return NewAny("RESULT", value)
+func NewResult(value any) Result {
+	return Result{value}
 }
