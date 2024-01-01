@@ -70,7 +70,11 @@ Use "sumdiff [command] --help" for more information about a command.
     ```
   Output1:
     ```text                                                                               
-    true
+    +--------+                                                                                          
+    | result |
+    +--------+
+    |  true  |
+    +--------+
     ```
     
   Example2:
