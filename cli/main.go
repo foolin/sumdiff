@@ -21,8 +21,36 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/foolin/sumdiff/cmd"
+import (
+	goversion "github.com/caarlos0/go-version"
+	"github.com/foolin/sumdiff/cmd"
+)
+
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
 
 func main() {
-	cmd.Execute()
+	cmd.Execute(buildVersion(version, commit, date))
+}
+
+const website = "https://1024km.com/sumdiff"
+
+func buildVersion(version, commit, date string) goversion.Info {
+	return goversion.GetVersionInfo(
+		goversion.WithAppDetails("sumdiff", "A useful comparison tool for differences", website),
+		func(i *goversion.Info) {
+			if commit != "" {
+				i.GitCommit = commit
+			}
+			if date != "" {
+				i.BuildDate = date
+			}
+			if version != "" {
+				i.GitVersion = version
+			}
+		},
+	)
 }
