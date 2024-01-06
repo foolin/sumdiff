@@ -22,7 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
-	goversion "github.com/caarlos0/go-version"
+	"fmt"
+	"github.com/foolin/sumdiff/vo"
 	"os"
 	"path/filepath"
 
@@ -87,8 +88,9 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(verInfo goversion.Info) {
-	rootCmd.Version = verInfo.String()
+func Execute(appInfo vo.AppInfo) {
+	appInfo.Description = fmt.Sprintf("%v: %v", rootCmd.Use, rootCmd.Long)
+	rootCmd.Version = appInfo.String()
 	rootCmd.SetVersionTemplate("{{.Version}}")
 	err := rootCmd.Execute()
 	if err != nil {

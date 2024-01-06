@@ -3,7 +3,6 @@ module github.com/foolin/sumdiff
 go 1.20
 
 require (
-	github.com/caarlos0/go-version v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/liushuochen/gotable v0.0.0-20221119160816-1113793e7092
 	github.com/mattn/go-runewidth v0.0.15
