@@ -22,11 +22,12 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"github.com/foolin/sumdiff/vo"
 	"github.com/spf13/cobra"
 )
 
 const (
-	Version   = "development"
+	Version   = "1.0.0-SNAPSHOT"
 	BuildDate = "2024-01-01"
 	Commit    = ""
 )
@@ -37,6 +38,12 @@ var versionCmd = &cobra.Command{
 	Short: "Display current version",
 	Long:  `Display current version and build platform`,
 	Run: func(cmd *cobra.Command, args []string) {
+		info := vo.VerInfo{
+			Version:   Version,
+			BuiltDate: BuildDate,
+			Commit:    Commit,
+		}
+		_ = writer.Write(info)
 	},
 }
 

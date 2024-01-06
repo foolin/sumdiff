@@ -42,7 +42,7 @@ var eqCmd = &cobra.Command{
 		if err != nil {
 			vlog.Printf("Error: %v", err)
 		}
-		writer.MustWrite(vo.NewResult(ret))
+		writer.MustWrite(vo.NewAnyValue(ret))
 	},
 }
 

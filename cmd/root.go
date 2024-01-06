@@ -53,7 +53,7 @@ var rootCmd = &cobra.Command{
 			var ok bool
 			format, ok = write.FormatOfName(config.Format)
 			if !ok {
-				vlog.Exit(1, "Format invalid: %v\n", config.Format)
+				vlog.Exit("Format invalid: %v\n", config.Format)
 				return
 			}
 		}
@@ -65,7 +65,7 @@ var rootCmd = &cobra.Command{
 			var err error
 			file, err = os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 			if err != nil {
-				vlog.Exit(1, "Open file %v error: %\n", path, err)
+				vlog.Exit("Open file %v error: %\n", path, err)
 				return
 			}
 			w = file
