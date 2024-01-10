@@ -13,7 +13,7 @@ type HashList []HashInfo
 
 func (r HashList) Array() [][]string {
 	out := make([][]string, len(r)+1)
-	out[0] = []string{"Hash", "Size", "Path"}
+	out[0] = []string{"HASH", "SIZE", "PATH"}
 	for i, v := range r {
 		out[i+1] = []string{v.Hash, fmt.Sprintf("%v", v.Size), v.Path}
 	}

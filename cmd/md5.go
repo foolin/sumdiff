@@ -33,8 +33,8 @@ import (
 // md5Cmd represents the md5 command
 var md5Cmd = &cobra.Command{
 	Use:   "md5 <path> ...",
-	Short: "Calculate md5 hex string",
-	Long:  `Calculate md5 hex string, eg: hash sha1 a.text`,
+	Short: "Calculate md5 hexadecimal string",
+	Long:  `Calculate md5 hexadecimal string, eg: hash sha1 a.text`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		statusbar.Start()

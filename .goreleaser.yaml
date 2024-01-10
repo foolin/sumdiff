@@ -17,7 +17,7 @@ before:
 
 builds:
   - binary: sumdiff
-    main: ./cli/sumdiff.go
+    main: ./cli/main.go
     goos:
       - linux
       - darwin

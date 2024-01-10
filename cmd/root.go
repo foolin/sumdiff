@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
+	"github.com/foolin/sumdiff/vo"
 	"os"
 	"path/filepath"
 
@@ -53,7 +55,7 @@ var rootCmd = &cobra.Command{
 			var ok bool
 			format, ok = write.FormatOfName(config.Format)
 			if !ok {
-				vlog.Exit(1, "Format invalid: %v\n", config.Format)
+				vlog.Exit("Format invalid: %v\n", config.Format)
 				return
 			}
 		}
@@ -65,7 +67,7 @@ var rootCmd = &cobra.Command{
 			var err error
 			file, err = os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0666)
 			if err != nil {
-				vlog.Exit(1, "Open file %v error: %\n", path, err)
+				vlog.Exit("Open file %v error: %\n", path, err)
 				return
 			}
 			w = file
@@ -86,9 +88,11 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute(appInfo vo.AppInfo) {
+	appInfo.Description = fmt.Sprintf("%v: %v", rootCmd.Use, rootCmd.Long)
+	rootCmd.Version = appInfo.String()
+	rootCmd.SetVersionTemplate("{{.Version}}")
 	err := rootCmd.Execute()
-
 	if err != nil {
 		os.Exit(1)
 	}

@@ -2,15 +2,22 @@ package vo
 
 import "fmt"
 
-type Any struct {
-	Name  string
-	Value any
+type AnyValue struct {
+	Name  string `json:"name" yaml:"name"`
+	Value any    `json:"value" yaml:"value"`
 }
 
-func (r Any) Array() [][]string {
+func (r AnyValue) Array() [][]string {
+	if r.Name == "" {
+		return [][]string{{fmt.Sprintf("%v", r.Value)}}
+	}
 	return [][]string{{r.Name}, {fmt.Sprintf("%v", r.Value)}}
 }
 
-func NewAny(name string, value any) Any {
-	return Any{name, value}
+func NewAnyValue(value any) AnyValue {
+	return NewNameValue("", value)
+}
+
+func NewNameValue(name string, value any) AnyValue {
+	return AnyValue{name, value}
 }

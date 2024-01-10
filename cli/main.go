@@ -21,8 +21,32 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/foolin/sumdiff/cmd"
+import (
+	"github.com/foolin/sumdiff/cmd"
+	"github.com/foolin/sumdiff/vo"
+)
+
+var (
+	version = "devel"
+	commit  = "none"
+	date    = "unknown"
+)
 
 func main() {
-	cmd.Execute()
+	cmd.Execute(buildVersion(version, commit, date))
+}
+
+func buildVersion(version, commit, date string) vo.AppInfo {
+	info := vo.NewAppInfo()
+	if version != "" {
+		info.Version = version
+	}
+	if commit != "" {
+		info.Commit = commit
+	}
+	if date != "" {
+		info.Date = date
+	}
+
+	return info
 }

@@ -34,6 +34,9 @@ func ListPath(path string, acceptFn func(info PathInfo) bool) (map[string]PathIn
 func WalkPath(root string, fn WalkFunc) error {
 	return filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
 		relative := RelativePath(path, root)
+		if relative == "" {
+			return nil
+		}
 		walkInfo := PathInfo{
 			Relative: relative,
 			Path:     path,
@@ -78,5 +81,11 @@ func AbsPath(path string) string {
 }
 
 func RelativePath(path, root string) string {
-	return strings.TrimPrefix(AbsPath(path), AbsPath(root))
+	absPath := AbsPath(path)
+	absRoot := AbsPath(root)
+	relative := strings.TrimPrefix(absPath, absRoot)
+	if len(absPath) > len(relative) {
+		return strings.TrimPrefix(relative, string(filepath.Separator))
+	}
+	return relative
 }
